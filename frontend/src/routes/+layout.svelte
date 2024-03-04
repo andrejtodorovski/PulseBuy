@@ -3,7 +3,7 @@
 import Nav from "$lib/nav.svelte";
 </script>
 <Nav/>
-<main class="main-container">
+<main class="main-container container">
     <slot></slot>
 </main>
 <Footer/>
