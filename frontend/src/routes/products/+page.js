@@ -1,7 +1,7 @@
 import { interceptedFetch } from "../../helpers/helpers"
 
 export async function load({ fetch, params }) {
-    const res = await interceptedFetch('http://localhost:3000/product/')
+    const res = await interceptedFetch('http://localhost:3000/product/', {})
     const products = await res.json()
     if (res.ok) {
       return {
@@ -11,6 +11,6 @@ export async function load({ fetch, params }) {
 
     return {
       status: res.status,
-      error: new Error('Could not fetch the guides')
+      error: new Error('Could not fetch the products.')
     }
   }

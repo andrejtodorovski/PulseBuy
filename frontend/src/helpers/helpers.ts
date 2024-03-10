@@ -2,7 +2,7 @@ export const setAuthToken = (token: string) => {
   sessionStorage.setItem("AuthorizationToken", `Bearer ${token}`);
 };
 
-export async function interceptedFetch(input: string, init?: any) {
+export async function interceptedFetch(input: string, init: any) {
   const token = getAuthToken();
   if (token) {
     if (!init.headers) {
