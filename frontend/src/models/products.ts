@@ -22,6 +22,6 @@ export interface Product {
     description: string;
     price: number;
     quantity: number;
-    categoryId: number;
+    category: any;
     imageURL: string;
 }
