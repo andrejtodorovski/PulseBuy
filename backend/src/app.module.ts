@@ -9,6 +9,7 @@ import { ChatGateway } from './chat/chat.gateway';
 import { ProductModule } from './product/product.module';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
+import { CategoryModule } from './category/category.module';
 
 
 @Module({
@@ -37,6 +38,7 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
     MessagesModule,
     AuthModule,
     ProductModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],

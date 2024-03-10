@@ -4,6 +4,7 @@
 </script>
 
 <div class="products">
+  <a href="/products/addNewProduct" class="btn btn-primary mb-5">Add new product</a>
   <ul>
     {#each data.products as product}
       <div>
