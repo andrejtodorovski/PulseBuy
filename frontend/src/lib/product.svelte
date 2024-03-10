@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { isUserLoggedIn, removeAuthToken } from "../helpers/helpers";
   import "../styles/global.css";
-  export let product:any;
+  import type {Product} from "../models/products";
+  export let product:Product;
 </script>
 
-<a href="/path-to-details-page" class="phone-card-link">
+<a href={`/products/${product.id}`} class="phone-card-link">
   <div class="phone-card">
     <img
       src="{product.imageURL}"
@@ -31,68 +31,3 @@
     </div>
   </div>
 </a>
-
-<style>
-  .phone-card-link {
-    text-decoration: none;
-    color: inherit; 
-  }
-
-  .phone-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    width: 300px;
-    margin: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: block;
-    color: #333;
-    background-color: #fff;
-    transition:
-      transform 0.2s ease-in-out,
-      box-shadow 0.2s ease-in-out;
-  }
-
-  .phone-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .phone-image {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    object-fit: cover;
-  }
-
-  .brand-name {
-    font-weight: bold;
-    margin-top: 12px;
-  }
-
-  .model-name {
-    margin: 5px 0;
-  }
-
-  .price-before-sale {
-    color: #999;
-    text-decoration: line-through;
-    margin: 0;
-  }
-
-  .new-price {
-    color: #e53935;
-    font-size: 18px;
-    margin: 5px 0 20px;
-  }
-
-  .phone-actions {
-    display: flex;
-    justify-content: space-around;
-  }
-
-    .phone-actions a {
-        color: #333;
-        text-decoration: none;
-    }
-</style>
