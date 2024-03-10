@@ -1,25 +1,87 @@
-<script>
+<script lang="ts">
+  import type {PageData} from "./$types"
+  export let data: PageData
+
+  const images = [
+    { id: 1, src: "/img/iphone15pro.jpg", alt: "Iphone 15 Pro" },
+    { id: 2, src: "/img/galaxys24ultra.jpg", alt: "Samsung Galaxy S24 Ultra" },
+    {
+      id: 3,
+      src: "/img/pixelphonebudswatch.jpg",
+      alt: "Google Pixel Phone, Buds and Watch",
+    },
+  ];
+  import Product from "$lib/product.svelte";
 </script>
 
 <div class="index">
-  <h2>Welcome</h2>
-  <p>
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sunt laborum
-    magnam deleniti recusandae, quis aperiam, architecto neque, voluptatem dicta
-    expedita aut id voluptate omnis consectetur dolore! Quo quae perferendis vel
-    dignissimos quasi illum aperiam dolores, id, laudantium voluptatibus fugiat
-    accusantium impedit velit modi ratione iure qui culpa! Repellendus
-    cupiditate aliquid quam magni. Laudantium, laboriosam quibusdam. Provident,
-    quae incidunt! Aspernatur, vel?
-  </p>
-  <a href="/products">View Products</a>
-  <a href="/about-us">About</a>
+  <div
+    id="carouselExampleIndicators"
+    class="carousel slide"
+    data-bs-ride="carousel"
+  >
+    <div class="carousel-indicators">
+      {#each images as image, index (image.id)}
+        <button
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide-to={index}
+          class={index === 0 ? "active" : ""}
+          aria-current={index === 0 ? "true" : "false"}
+          aria-label={`Slide ${index + 1}`}
+        ></button>
+      {/each}
+    </div>
+    <div class="carousel-inner">
+      {#each images as image, index (image.id)}
+        <div class={`carousel-item ${index === 0 ? "active" : ""}`}>
+          <img
+            src={image.src}
+            class="d-block w-100 carousel-img"
+            alt={image.alt}
+          />
+        </div>
+      {/each}
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <div class="container">
+    <h1 class="p-3">Featured products</h1>
+
+    <div class="d-flex">
+      {#each data.products as product}
+        <Product product={product} />
+      {/each}
+    </div>
+  </div>
 </div>
 
 <style>
   .index {
     text-align: center;
     display: block;
-    margin: 20px auto;
+    margin: 0 auto;
+  }
+  .carousel-img {
+    width: 100%;
+    height: 38rem;
+    object-fit: cover;
   }
 </style>
