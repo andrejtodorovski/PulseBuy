@@ -1,6 +1,6 @@
 import ProductsRepository from "../../repository/productsRepository";
 
-export async function load({fetch, params}) {
+export async function load() {
     const res = await ProductsRepository.fetchProducts()
     const products = await res.json()
 

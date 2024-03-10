@@ -5,9 +5,8 @@ body {
 
 a {
     text-decoration: none;
-    color: white;
 }
 
 .main-container {
-  min-height: 63vh;
+  min-height: 65vh;
 }

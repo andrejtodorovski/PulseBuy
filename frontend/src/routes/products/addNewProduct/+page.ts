@@ -1,6 +1,6 @@
 import CategoriesRepository from "../../../repository/categoriesRepository";
 
-export async function load({fetch, params}) {
+export async function load() {
     const res = await CategoriesRepository.fetchCategories()
     const categories = await res.json()
 

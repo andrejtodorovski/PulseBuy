@@ -3,7 +3,7 @@
   import "../styles/global.css";
 </script>
 
-<footer class="text-center text-white p-4">
+<footer class="text-center text-white p-4 mt-5">
   <div class="container pb-3">
     <div class="row d-flex justify-content-center">
       <div class="col-md-4 pt-2">

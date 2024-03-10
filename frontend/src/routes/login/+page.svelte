@@ -75,7 +75,7 @@
       {/if}
       <button type="submit" class="btn btn-primary">Log in</button>
       <p class="text-center mt-3">
-        Don't have an account? <a href="/login">Register here</a>
+        Don't have an account? <a href="/register">Register here</a>
       </p>
     </form>
   </div>

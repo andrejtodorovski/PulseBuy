@@ -6,6 +6,10 @@ class ProductsRepository {
         return interceptedFetch('http://localhost:3000/product/', {});
     }
 
+    fetchProductById = (id: string): Promise<Response> => {
+        return interceptedFetch(`http://localhost:3000/product/${id}`, {});
+    }
+
     addNewProduct = (createProductDto: CreateProductDto): Promise<Response> => {
         return interceptedFetch("http://localhost:3000/product", {
             method: "POST",
