@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {Category} from "../models/category.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
@@ -8,7 +8,8 @@ export class CategoryService {
     constructor(
         @InjectRepository(Category)
         private categoryRepository: Repository<Category>,
-    ) {}
+    ) {
+    }
 
     async findAll() {
         return this.categoryRepository.find();
@@ -16,7 +17,7 @@ export class CategoryService {
 
     async findOne(id: number) {
         return this.categoryRepository.findOne({
-            where: { id },
+            where: {id},
         });
     }
 }
