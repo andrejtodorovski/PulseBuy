@@ -7,7 +7,7 @@ import { CartService } from './cart.service';
 import { CartController } from './cart.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Cart, User, Product])],
+  imports: [TypeOrmModule.forFeature([Cart, User])],
   providers: [CartService],
   controllers: [CartController],
   exports: [CartService],
@@ -16,4 +16,4 @@ import { CartController } from './cart.controller';
   controllers: [CartController],
   providers: [CartService],
 })
-export class OrderModule {}
+export class CartModule {}

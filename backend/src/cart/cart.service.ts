@@ -3,12 +3,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "src/users/entities/user.entity";
-import { Order } from "src/models/order.entity";
 import { Transactional } from "typeorm-transactional";
 import { CreateCartDto } from "./dto/create-cart.dto";
 import { Product } from "src/models/product.entity";
+import { CartStatus } from "src/models/cart-status.enum";
 @Injectable()
 export class CartService {
+
     constructor(
         @InjectRepository(Cart)
         private cartRepository: Repository<Cart>,
@@ -27,16 +28,10 @@ export class CartService {
         if (!user) {
             throw new NotFoundException(`User with id ${createCartDto.userId} not found`);
         }
-        const product = await this.productRepository.findOne({
-            where: { id: createCartDto.productId },
-        });
-        if (!product) {
-            throw new NotFoundException(`Product with id ${createCartDto.productId} not found`);
-        }
         const cart = this.cartRepository.create({
             ...createCartDto,
             user: user,
-            product: product,
+
           });
         return await this.cartRepository.save(cart);
     }
@@ -54,12 +49,13 @@ export class CartService {
             where: { id: userId },
         }) as unknown as User;
       return this.cartRepository.find({
-        where: { user },
-        relations: ['product'],
+        where: { user }
       });
     }
     remove(id: number) {
         return this.cartRepository.delete(id);
     }
-
+    changeStatus(id: number) {
+        return this.cartRepository.update(id, { status: CartStatus.DELIVERED });
+      }
 }

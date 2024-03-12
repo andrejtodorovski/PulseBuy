@@ -30,4 +30,9 @@ export class CartController {
     findByUser(@Param('id') id: string) {
         return this.cartService.findByUser(+id);
     }
+    
+  @Patch('change-status/:id')
+  changeStatus(@Param('id') id: string) {
+    return this.cartService.changeStatus(+id);
+  }
 }

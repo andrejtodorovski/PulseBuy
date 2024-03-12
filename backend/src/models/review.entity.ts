@@ -21,6 +21,8 @@ export class Review {
   @Column('text')
   comment: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    default: Date.now()
+  })
   reviewDate: Date;
 }

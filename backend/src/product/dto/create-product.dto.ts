@@ -6,8 +6,6 @@ export class CreateProductDto {
 
   price: number;
 
-  quantity: number;
-
   categoryId: number;
 
   imageURL: string;
