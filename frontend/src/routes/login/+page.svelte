@@ -22,6 +22,7 @@
         const data = await res.json();
         console.log(data);
         setAuthToken(data.token);
+        localStorage.setItem("userId", data.userId);
 
         // $session.user = data.user;
         // goto("/");

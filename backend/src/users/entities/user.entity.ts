@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Order } from '../../models/order.entity';
 
 @Entity(
   { name: 'users' }
@@ -25,8 +24,5 @@ export class User {
 
   @Column({ default: false })
   isAdmin: boolean;
-
-  @OneToMany(() => Order, order => order.user)
-  orders: Order[];
 
 }

@@ -17,7 +17,7 @@ export class CartItemController {
     return this.cartItemService.findAll();
   }
 
-  @Get(':id')
+  @Get('item/:id')
   findOne(@Param('id') id: string) {
     return this.cartItemService.findOne(+id);
   }

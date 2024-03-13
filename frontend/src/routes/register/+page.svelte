@@ -1,5 +1,7 @@
 <script lang="ts">
   import { interceptedFetch } from "../../helpers/helpers";
+    import { CreateCartDto } from "../../models/cart";
+    import CartRepository from "../../repository/cartRepository";
 
   let error;
   let email: string;
@@ -7,9 +9,22 @@
   let firstName: string;
   let lastName: string;
   let address: string;
+  let createCartDto = new CreateCartDto();
 
   let message: string | undefined;
-
+  const addCart = async (createCartDto : CreateCartDto) => {
+    try {
+        const res = await CartRepository.createCart(createCartDto);
+        if (res.ok) {
+            message = "User was registered successfully and the cart was added!";
+        } else {
+            message = "User was registered, but failed to add cart.";
+        }
+    } catch (err) {
+        error = "RES002: An error occurred while creating the cart.";
+        console.log(err);
+    }
+  };
   const register = async () => {
     try {
       const res = await interceptedFetch("http://localhost:3000/users/register", {
@@ -27,16 +42,21 @@
       });
 
       if (res.ok) {
+        const userData = await res.json();
+        createCartDto.userId = userData.id;
         message = "User was registered successfully!";
         email = "";
         firstName = "";
         lastName = "";
         password = "";
         address = "";
+        await addCart(createCartDto);
+
       }
     } catch (err) {
       error = "RES001: An error occured.";
     }
+
   };
 </script>
 

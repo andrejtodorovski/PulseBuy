@@ -26,7 +26,6 @@
         <p class="category">Category: {product?.category.name}</p>
         <p class="description">{product?.description}</p>
         <p class="price">Price: ${product?.price}</p>
-        <p class="quantity">Quantity: {product?.quantity}</p>
     </div>
 </div>
 

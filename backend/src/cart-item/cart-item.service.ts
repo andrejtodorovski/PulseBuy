@@ -5,15 +5,37 @@ import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 import { CartItem } from 'src/models/cart-item.entity';
 
+import { Product } from 'src/models/product.entity';
+import { Cart } from 'src/models/cart.entity';
+
 @Injectable()
 export class CartItemService {
   constructor(
     @InjectRepository(CartItem)
     private cartItemRepository: Repository<CartItem>,
+    @InjectRepository(Cart)
+    private cartRepository: Repository<Cart>,
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
   ) {}
 
   async create(createCartItemDto: CreateCartItemDto): Promise<CartItem> {
-    const cartItem = this.cartItemRepository.create(createCartItemDto);
+    const cart = await this.cartRepository.findOne({
+      where: { id: createCartItemDto.cartId },
+  });
+  if (!cart) {
+      throw new NotFoundException(`Cart with id ${createCartItemDto.cartId} not found`);
+  }
+  const product = await this.productRepository.findOne({
+    where: { id: createCartItemDto.productId },
+});
+if (!product) {
+    throw new NotFoundException(`Product with id ${createCartItemDto.productId} not found`);
+}
+    const cartItem = this.cartItemRepository.create({...createCartItemDto,
+      cart: cart,
+      product : product
+    });
     return this.cartItemRepository.save(cartItem);
   }
 

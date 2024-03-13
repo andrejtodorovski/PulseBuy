@@ -15,6 +15,7 @@ export async function interceptedFetch(input: string, init: any) {
 
 export const removeAuthToken = () => {
   sessionStorage.removeItem("AuthorizationToken");
+  localStorage.removeItem("userId");
   window.location.reload();
 };
 

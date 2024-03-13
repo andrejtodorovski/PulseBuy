@@ -3,6 +3,7 @@
     import {CreateProductDto} from "../../../models/products";
     import type {PageData} from "./$types"
     import ProductsRepository from "../../../repository/productsRepository";
+    import { goto } from "$app/navigation";
 
     export let data: PageData
 
@@ -17,6 +18,7 @@
 
             if (res.ok) {
                 message = "Product was added successfully!";
+                goto('/products');
             }
         } catch (err) {
             error = "RES001: An error occurred.";
@@ -53,12 +55,6 @@
             <div class="form-group">
                 <label for="productImage">Product Image:</label>
                 <input type="text" class="form-control" id="productImage" bind:value={createProductDto.imageURL}/>
-            </div>
-
-            <div class="form-group">
-                <label for="productQuantity">Product Quantity:</label>
-                <input type="number" step="1" class="form-control" id="productQuantity"
-                       bind:value={createProductDto.quantity}/>
             </div>
 
             <div class="form-group">

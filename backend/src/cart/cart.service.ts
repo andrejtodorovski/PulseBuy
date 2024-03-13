@@ -28,6 +28,7 @@ export class CartService {
         if (!user) {
             throw new NotFoundException(`User with id ${createCartDto.userId} not found`);
         }
+
         const cart = this.cartRepository.create({
             ...createCartDto,
             user: user,
@@ -48,8 +49,8 @@ export class CartService {
         const user = this.userRepository.findOne({
             where: { id: userId },
         }) as unknown as User;
-      return this.cartRepository.find({
-        where: { user }
+      return this.cartRepository.findOne({
+        where: { user },
       });
     }
     remove(id: number) {

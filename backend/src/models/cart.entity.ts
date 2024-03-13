@@ -1,7 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { User } from '../users/entities/user.entity';
-import { Product } from './product.entity';
-import { CartItem } from './cart-item.entity';
+
 import { CartStatus } from './cart-status.enum';
 
 @Entity(
@@ -11,7 +10,8 @@ export class Cart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
+  @OneToOne(() => User)
+  @JoinColumn() 
   user: User;
 
   @Column({
@@ -21,6 +21,4 @@ export class Cart {
   })
   status: CartStatus;
 
-  @Column()
-  quantity: number;
 }

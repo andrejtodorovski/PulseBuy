@@ -19,7 +19,8 @@ export class Message {
   chat: Chat;
 
   @Column({
-      default: Date.now()
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
   })
   timestamp: Date;
 

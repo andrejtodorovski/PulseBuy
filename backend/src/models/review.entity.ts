@@ -22,7 +22,8 @@ export class Review {
   comment: string;
 
   @CreateDateColumn({
-    default: Date.now()
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
   })
   reviewDate: Date;
 }
