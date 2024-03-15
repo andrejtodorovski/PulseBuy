@@ -1,3 +1,4 @@
+import { onMount } from "svelte";
 import CategoriesRepository from "../../../repository/categoriesRepository";
 
 export async function load() {
@@ -15,4 +16,5 @@ export async function load() {
         status: res.status,
         error: new Error('Could not fetch the products.')
     }
+    
 }

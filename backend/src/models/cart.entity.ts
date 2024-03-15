@@ -10,8 +10,7 @@ export class Cart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User)
-  @JoinColumn() 
+  @ManyToOne(() => User) 
   user: User;
 
   @Column({

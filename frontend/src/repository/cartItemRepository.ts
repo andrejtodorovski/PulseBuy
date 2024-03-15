@@ -15,6 +15,9 @@ class CartItemRepository {
             },
         });
     }
+    getCartItemsByCartId = (id: string): Promise<Response> => {
+        return interceptedFetch(`http://localhost:3000/cart-item/cart/${id}`, {});
+    }
 }
 
 export default new CartItemRepository();

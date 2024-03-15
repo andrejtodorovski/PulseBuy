@@ -35,4 +35,8 @@ export class CartController {
   changeStatus(@Param('id') id: string) {
     return this.cartService.changeStatus(+id);
   }
+  @Get('user/ordered/:id')
+  findByUserOrders(@Param('id') id: string) {
+      return this.cartService.findByUserOrders(+id);
+  }
 }

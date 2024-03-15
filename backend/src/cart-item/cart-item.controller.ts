@@ -31,4 +31,8 @@ export class CartItemController {
   remove(@Param('id') id: string) {
     return this.cartItemService.remove(+id);
   }
+  @Get('cart/:id')
+  getCartItemsByCartId(@Param('id') id: string) {
+    return this.cartItemService.getCartItemsByCartId(+id);
+  }
 }

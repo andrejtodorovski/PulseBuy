@@ -50,7 +50,17 @@ export class CartService {
             where: { id: userId },
         }) as unknown as User;
       return this.cartRepository.findOne({
-        where: { user },
+        where: { user ,
+        status: CartStatus.IN_CART },
+      });
+    }
+    findByUserOrders(userId: number) {
+        const user = this.userRepository.findOne({
+            where: { id: userId },
+        }) as unknown as User;
+      return this.cartRepository.find({
+        where: { user ,
+        status: CartStatus.DELIVERED },
       });
     }
     remove(id: number) {

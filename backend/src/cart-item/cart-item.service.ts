@@ -10,6 +10,7 @@ import { Cart } from 'src/models/cart.entity';
 
 @Injectable()
 export class CartItemService {
+
   constructor(
     @InjectRepository(CartItem)
     private cartItemRepository: Repository<CartItem>,
@@ -65,5 +66,15 @@ if (!product) {
     if (result.affected === 0) {
       throw new NotFoundException(`CartItem #${id} not found`);
     }
+  }
+  async getCartItemsByCartId(cartId: number): Promise<CartItem[]> {
+    const cartItems = await this.cartItemRepository.find({
+      where: { cart: { id: cartId } },
+      relations: ['product'],
+    });
+    if (!cartItems) {
+      throw new NotFoundException(`Cart with id ${cartId} not found`);
+    }
+    return cartItems;
   }
 }

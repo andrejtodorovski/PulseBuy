@@ -17,6 +17,18 @@ class CartRepository {
     getCartByUser = (id: string): Promise<Response> => {
         return interceptedFetch(`http://localhost:3000/cart/user/${id}`, {});
     }
+    orderCart = (id: string): Promise<Response> => {
+        return interceptedFetch(`http://localhost:3000/cart/change-status/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+}
+getCartByUserOrdered = (id: string): Promise<Response> => {
+    return interceptedFetch(`http://localhost:3000/cart/user/ordered/${id}`, {});
+}
 }
 
 export default new CartRepository();

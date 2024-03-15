@@ -46,7 +46,7 @@ import { ChatModule } from './chat/chat.module';
     ReviewModule,
     CartItemModule,
     MessageModule,
-    ChatModule
+    ChatModule,
     ReviewModule
   ],
   controllers: [AppController],
