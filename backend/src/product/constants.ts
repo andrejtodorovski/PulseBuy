@@ -1,0 +1,1 @@
+export const PRODUCT_MODULE_NAME = 'Product'
