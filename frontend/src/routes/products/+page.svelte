@@ -1,7 +1,19 @@
-<script>
+<script type="ts">
+
+    import {onMount} from "svelte";
+    import {io} from "$lib/webSocketConnection";
+    import {load} from "./+page";
 
     /** @type {import('./$types').PageData} */
     export let data;
+
+    onMount(() => {
+        io.on("ProductCreatedEvent", (event) => {
+            load().then((newData) => {
+                data = newData;
+            })
+        })
+    })
 
 </script>
 

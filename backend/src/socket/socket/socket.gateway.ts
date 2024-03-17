@@ -2,7 +2,7 @@ import {OnGatewayConnection, WebSocketGateway, WebSocketServer} from '@nestjs/we
 import {Socket} from "socket.io";
 import {SocketService} from "./socket.service";
 
-@WebSocketGateway()
+@WebSocketGateway({cors: true})
 export class SocketGateway implements OnGatewayConnection {
     @WebSocketServer()
     private server: Socket;

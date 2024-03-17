@@ -1,6 +1,5 @@
 import {interceptedFetch} from "../helpers/helpers";
-import type { CreateCartDto } from "../models/cart";
-import type { CreateCartItemDto } from "../models/cart-item";
+import type {CreateCartItemDto} from "../models/cart-item";
 
 class CartItemRepository {
     getCartItem = (id: string): Promise<Response> => {
