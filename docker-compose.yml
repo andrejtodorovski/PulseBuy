@@ -1,0 +1,42 @@
+version: "3.3"
+services:
+  pulsebuy_db:
+    image: postgres:16.1
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: pulsebuy
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "54321:5432"
+    container_name: pulsebuy_db
+  pulsebuy_backend:
+    depends_on:
+      - pulsebuy_db
+    # image: registry.gitlab.com/pulsebuy/v1-backend:dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pulsebuy_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - "DATABASE_HOST=localhost"
+      - "DATABASE_PORT=54321"
+      - "DATABASE_USER=postgres"
+      - "DATABASE_PASSWORD=admin"
+      - "DATABASE_NAME=pulsebuy"
+  pulsebuy_frontend:
+    # image: registry.gitlab.com/pulsebuy/v1-frontend:prod
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5050:3000"
+    environment:
+      - "API_URL=http://localhost:3000"
+volumes:
+  db-data:
