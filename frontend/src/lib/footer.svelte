@@ -16,10 +16,10 @@
       </div>
       <div class="col-md-4 pt-2">
         <p class="d-flex justify-content-center align-items-center">
-          <a href="/"> About us </a>
+          <a href="/about-us"> About us </a>
         </p>
         <p class="d-flex justify-content-center align-items-center">
-          <a href="/">Contact</a>
+          <a href="/contact">Contact</a>
         </p>
       </div>
       <div class="col-md-4 pt-2">
