@@ -30,6 +30,8 @@ services:
       - "DATABASE_NAME=pulsebuy"
   pulsebuy_frontend:
     # image: registry.gitlab.com/pulsebuy/v1-frontend:prod
+    depends_on:
+      - pulsebuy_backend
     restart: always
     build:
       context: ./frontend
