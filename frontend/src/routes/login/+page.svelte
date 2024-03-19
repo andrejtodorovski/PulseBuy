@@ -8,7 +8,7 @@
   const login = async () => {
     error = undefined;
     try {
-      const res = await interceptedFetch("http://localhost:3000/users/login", {
+      const res = await interceptedFetch("/users/login", {
         method: "POST",
         body: JSON.stringify({
           username,

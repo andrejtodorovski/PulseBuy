@@ -16,10 +16,13 @@ import {ChatModule} from './chat/chat.module';
 import {SocketModule} from './socket/socket.module';
 import {EventEmitterModule} from "@nestjs/event-emitter";
 import {EventsModule} from './events/events.module';
+import * as process from "process";
+import {ConfigModule} from "@nestjs/config";
 
 
 @Module({
     imports: [
+        ConfigModule.forRoot(),
         EventEmitterModule.forRoot({
             // set this to `true` to use wildcards
             wildcard: true,
@@ -40,11 +43,11 @@ import {EventsModule} from './events/events.module';
             useFactory() {
                 return {
                     type: 'postgres',
-                    host: 'localhost',
-                    port: 5432,
-                    username: 'postgres',
-                    password: 'at',
-                    database: 'pulsebuy',
+                    host: process.env.DATABASE_HOST,
+                    port: parseInt(process.env.DATABASE_PORT),
+                    username: process.env.DATABASE_USER,
+                    password: process.env.DATABASE_PASSWORD,
+                    database: process.env.DATABASE_NAME,
                     entities: [__dirname + '/**/*.entity{.ts,.js}'],
                     synchronize: true,
                 };

@@ -3,10 +3,10 @@ import type { CreateCartDto } from "../models/cart";
 
 class CartRepository {
     fetchCarttById = (id: string): Promise<Response> => {
-        return interceptedFetch(`http://localhost:3000/cart/${id}`, {});
+        return interceptedFetch(`/cart/${id}`, {});
     }
     createCart = (createCartDto: CreateCartDto): Promise<Response> => {
-        return interceptedFetch("http://localhost:3000/cart", {
+        return interceptedFetch("/cart", {
             method: "POST",
             body: JSON.stringify(createCartDto),
             headers: {
@@ -15,10 +15,10 @@ class CartRepository {
         });
     }
     getCartByUser = (id: string): Promise<Response> => {
-        return interceptedFetch(`http://localhost:3000/cart/user/${id}`, {});
+        return interceptedFetch(`/cart/user/${id}`, {});
     }
     orderCart = (id: string): Promise<Response> => {
-        return interceptedFetch(`http://localhost:3000/cart/change-status/${id}`, {
+        return interceptedFetch(`/cart/change-status/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -27,7 +27,7 @@ class CartRepository {
 
 }
 getCartByUserOrdered = (id: string): Promise<Response> => {
-    return interceptedFetch(`http://localhost:3000/cart/user/ordered/${id}`, {});
+    return interceptedFetch(`/cart/user/ordered/${id}`, {});
 }
 }
 
