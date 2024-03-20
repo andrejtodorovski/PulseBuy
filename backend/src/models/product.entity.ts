@@ -22,4 +22,10 @@ export class Product {
 
   @Column()
   imageURL: string;
+
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 }

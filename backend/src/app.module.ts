@@ -21,6 +21,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { NewsletterModule } from './newsletter/newsletter.module';
 import * as process from "process";
 
 @Module({
@@ -101,6 +102,7 @@ import * as process from "process";
       }),
       inject: [ConfigService],
     }),
+    NewsletterModule,
   ],
   controllers: [AppController],
   providers: [AppService],
