@@ -9,6 +9,7 @@
     import CartItemRepository from '../../../repository/cartItemRepository';
     import type {Cart} from '../../../models/cart';  
         import type { PageData } from '../$types';
+    import { isUserLogged, isUserLoggedIn } from '../../../helpers/helpers';
     export let data: PageData;
   
     let product : Product;
@@ -19,6 +20,9 @@
    let  createCartItemDto = new CreateCartItemDto();
   
    onMount(async () => {
+    isUserLoggedIn() || goto('/login');
+
+
     try {
       const productResponse = await ProductsRepository.fetchProductById(productId);
       if (productResponse.ok) {

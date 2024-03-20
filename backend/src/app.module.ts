@@ -90,6 +90,7 @@ import * as process from "process";
           auth: {
             user: configService.get('MAIL_USER'),
             pass: configService.get('PASSWORD'),
+            jwt: configService.get('JWT_SECRET'),
           },
           tls: {
             rejectUnauthorized: false,

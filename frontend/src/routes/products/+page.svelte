@@ -3,11 +3,14 @@
     import {onMount} from "svelte";
     import {io} from "$lib/webSocketConnection";
     import {load} from "./+page";
+    import { goto } from "$app/navigation";
+    import { isUserLogged, isUserLoggedIn } from "../../helpers/helpers";
 
     /** @type {import('./$types').PageData} */
     export let data;
 
     onMount(() => {
+        isUserLoggedIn() || goto('/login');
         io.on("ProductCreatedEvent", (event) => {
             load().then((newData) => {
                 data = newData;

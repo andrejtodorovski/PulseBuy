@@ -4,6 +4,8 @@
     import CartRepository from '../../repository/cartRepository';
     import CartItemRepository from '../../repository/cartItemRepository';
     import type {Cart} from '../../models/cart';
+    import { goto } from '$app/navigation';
+    import { isUserLoggedIn } from '../../helpers/helpers';
 
     const orderedCarts = writable<Cart[]>([]);
 
@@ -17,15 +19,15 @@
         const cartsWithItemsPromises = carts.map(async (cart) => {
             const cartItemsResponse = await CartItemRepository.getCartItemsByCartId(cart.id.toString());
             const cartItems = await cartItemsResponse.json();
-            return {...cart, cartItems}; // Merge cart items into the cart
+            return {...cart, cartItems};
         });
 
-        // Wait for all promises to resolve
         const cartsWithItems = await Promise.all(cartsWithItemsPromises);
         orderedCarts.set(cartsWithItems);
     }
 
     onMount(() => {
+        isUserLoggedIn() || goto('/login');
         loadOrderedCarts();
     });
 </script>

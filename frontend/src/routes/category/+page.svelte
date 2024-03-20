@@ -1,6 +1,15 @@
-<script>
+<script lang="ts">
+    import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
+    import { isUserLoggedIn } from "../../helpers/helpers";
+
     /** @type {import('./$types').PageData} */
     export let data;
+    
+    onMount(async () => {
+        isUserLoggedIn() || goto('/login');
+
+    });
 </script>
 
 <div class="categories">
