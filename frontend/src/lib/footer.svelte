@@ -1,6 +1,29 @@
-<script>
+<script lang="ts">
   import { isUserLoggedIn, removeAuthToken } from "../helpers/helpers";
   import "../styles/global.css";
+  import { goto } from "$app/navigation";
+  import NewsletterRepository from "../repository/newsletterRepository";
+  import { CreateNewsletterDto } from "../models/newsletter";
+
+  let newsletter = new CreateNewsletterDto();
+  let message: string | undefined;
+  let error: string | undefined;
+
+  const subscribeToNewsletter = async () => {
+    try {
+      const res = await NewsletterRepository.subscribeToNewsletter(newsletter);
+
+      if (res.ok) {
+        message = "You have successfully subscribed to our newsletter!";
+        goto("/");
+      } else {
+        message = "Failed to subscribe to newsletter";
+      }
+    } catch (err) {
+      error = "RES001: An error occurred.";
+      console.log(err);
+    }
+  };
 </script>
 
 <footer class="text-center text-white p-4 mt-5">
@@ -27,11 +50,12 @@
           class="d-flex flex-column justify-content-center align-items-center"
         >
           <h5>Subscribe to our Newsletter</h5>
-          <form class="d-flex">
+          <form class="d-flex" on:submit|preventDefault={subscribeToNewsletter}>
             <input
               type="email"
               placeholder="Enter your email"
               class="form-control me-2"
+              bind:value={newsletter.email}
             />
             <button type="submit" class="btn btn-light">Subscribe</button>
           </form>
