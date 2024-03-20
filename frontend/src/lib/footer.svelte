@@ -1,9 +1,9 @@
 <script lang="ts">
   import { isUserLoggedIn, removeAuthToken } from "../helpers/helpers";
   import "../styles/global.css";
-  import { goto } from "$app/navigation";
   import NewsletterRepository from "../repository/newsletterRepository";
   import { CreateNewsletterDto } from "../models/newsletter";
+  import { toasts } from "svelte-toasts";
 
   let newsletter = new CreateNewsletterDto();
   let message: string | undefined;
@@ -14,13 +14,12 @@
       const res = await NewsletterRepository.subscribeToNewsletter(newsletter);
 
       if (res.ok) {
-        message = "You have successfully subscribed to our newsletter!";
-        goto("/");
+        toasts.success("You have successfully subscribed to our newsletter!");
       } else {
-        message = "Failed to subscribe to newsletter";
+        toasts.error("You have already subscribed to our newsletter!");
       }
     } catch (err) {
-      error = "RES001: An error occurred.";
+      toasts.error("There was a problem with the application");
       console.log(err);
     }
   };

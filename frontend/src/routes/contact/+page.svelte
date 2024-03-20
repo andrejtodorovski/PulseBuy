@@ -1,28 +1,32 @@
-<script lang='ts'>
+<script lang="ts">
   import { goto } from "$app/navigation";
   import { SendContact } from "../../models/contact";
   import ContactRepository from "../../repository/contactRepository";
+  import { toasts } from "svelte-toasts";
 
-    let contact = new SendContact();
-    let message: string | undefined;
-    let error: string | undefined;
+  let contact = new SendContact();
+  let message: string | undefined;
+  let error: string | undefined;
 
-    const sendContact = async () => {
-        try {
-            const res = await ContactRepository.sendContact(contact);
+  const sendContact = async () => {
+    try {
+      const res = await ContactRepository.sendContact(contact);
 
-            if (res.ok) {
-                message = "The mail was sent successfully!";
-                goto('/');
-            } else {
-                message = "Failed to send mail.";
-            }
-        } catch (err) {
-            error = "RES001: An error occurred.";
-            console.log(err);
-        }
-    };
+      if (res.ok) {
+        message = "The mail was sent successfully!";
+        toasts.success("The mail was sent successfully!");
+        goto("/");
+      } else {
+        message = "Failed to send mail.";
+        toasts.error("Failed to send mail.");
+      }
+    } catch (err) {
+      toasts.error("There was a problem with the application");
+      console.log(err);
+    }
+  };
 </script>
+
 <div class="container my-5">
   <div class="row">
     <div class="col-md-6">
@@ -72,11 +76,11 @@
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
       {#if message}
-      <p>{message}</p>
-        {/if}
-        {#if error}
-            <p class="text-danger">{error}</p>
-        {/if}
+        <p>{message}</p>
+      {/if}
+      {#if error}
+        <p class="text-danger">{error}</p>
+      {/if}
     </div>
   </div>
 </div>

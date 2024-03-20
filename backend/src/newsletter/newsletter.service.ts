@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { CreateNewsletterDto } from './dto/create-newsletter.dto';
 import { Newsletter } from 'src/models/newsletter.entity';
 import { Repository } from 'typeorm';

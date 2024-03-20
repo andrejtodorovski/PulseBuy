@@ -3,7 +3,7 @@ import type { CreateNewsletterDto } from "../models/newsletter";
 
 class NewsletterRepository {
   subscribeToNewsletter = (newsletter: CreateNewsletterDto): Promise<Response> => {
-    return interceptedFetch("http://localhost:3000/newsletter", {
+    return interceptedFetch("/newsletter", {
       method: "POST",
       body: JSON.stringify(newsletter),
       headers: {
