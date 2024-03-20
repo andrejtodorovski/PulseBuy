@@ -3,15 +3,15 @@ import type {CreateProductDto} from "../models/products";
 
 class ProductsRepository {
     fetchProducts = (): Promise<Response> => {
-        return interceptedFetch('http://localhost:3000/product/', {});
+        return interceptedFetch('/product/', {});
     }
 
     fetchProductById = (id: string): Promise<Response> => {
-        return interceptedFetch(`http://localhost:3000/product/${id}`, {});
+        return interceptedFetch(`/product/${id}`, {});
     }
 
     addNewProduct = (createProductDto: CreateProductDto): Promise<Response> => {
-        return interceptedFetch("http://localhost:3000/product", {
+        return interceptedFetch("/product", {
             method: "POST",
             body: JSON.stringify(createProductDto),
             headers: {

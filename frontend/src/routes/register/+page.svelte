@@ -27,7 +27,7 @@
   };
   const register = async () => {
     try {
-      const res = await interceptedFetch("http://localhost:3000/users/register", {
+      const res = await interceptedFetch("/users/register", {
         method: "POST",
         body: JSON.stringify({
           email: email,

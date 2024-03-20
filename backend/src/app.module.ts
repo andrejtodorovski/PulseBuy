@@ -22,6 +22,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NewsletterModule } from './newsletter/newsletter.module';
+import * as process from "process";
 
 @Module({
   imports: [
@@ -44,14 +45,14 @@ import { NewsletterModule } from './newsletter/newsletter.module';
     TypeOrmModule.forRootAsync({
       useFactory() {
         return {
-          type: 'postgres',
-          host: 'localhost',
-          port: 5432,
-          username: 'postgres',
-          password: 'at',
-          database: 'pulsebuy',
-          entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          synchronize: true,
+            type: 'postgres',
+            host: process.env.DATABASE_HOST,
+            port: parseInt(process.env.DATABASE_PORT),
+            username: process.env.DATABASE_USER,
+            password: process.env.DATABASE_PASSWORD,
+            database: process.env.DATABASE_NAME,
+            entities: [__dirname + '/**/*.entity{.ts,.js}'],
+            synchronize: true,
         };
       },
       async dataSourceFactory(options) {
@@ -78,7 +79,7 @@ import { NewsletterModule } from './newsletter/newsletter.module';
     TasksModule,
     ConfigModule.forRoot({
       isGlobal: true,
-        envFilePath: 'secrets.env',
+        envFilePath: '.env',
     }),
     MailerModule.forRootAsync({
       imports: [ConfigModule],

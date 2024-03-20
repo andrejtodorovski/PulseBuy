@@ -3,6 +3,9 @@ export const setAuthToken = (token: string) => {
 };
 
 export async function interceptedFetch(input: string, init: any) {
+  const apiURL = import.meta.env.VITE_API_URL;
+  console.log(apiURL);
+
   const token = getAuthToken();
   if (token) {
     if (!init.headers) {
@@ -10,7 +13,7 @@ export async function interceptedFetch(input: string, init: any) {
     }
     init.headers.Authorization = token;
   }
-  return fetch(input, init);
+  return fetch(apiURL + input, init);
 }
 
 export const removeAuthToken = () => {
