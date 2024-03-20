@@ -4,6 +4,7 @@ import {UpdateProductDto} from './dto/update-product.dto';
 import {Product} from './entities/product.entity';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
+import { MoreThan } from 'typeorm';
 import {Category} from 'src/models/category.entity';
 import {Transactional} from 'typeorm-transactional';
 import {ProductCreatedEvent} from "./events/product-created.event";
@@ -43,6 +44,15 @@ export class ProductService {
 
     findAll() {
         return this.productsRepository.find();
+    }
+
+    findAllProductsAddedInLast24Hours() {
+        const twentyFourHoursAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        return this.productsRepository.find({
+            where: {
+                createdAt: MoreThan(twentyFourHoursAgo),
+            },
+        });
     }
 
     findOne(id: number) {
