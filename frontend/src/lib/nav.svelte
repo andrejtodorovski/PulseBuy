@@ -7,7 +7,7 @@
   <nav class="container d-flex align-items-center">
     <a href="/">
     <img
-      src="https://i.ibb.co/1sYbSM7/image-2024-03-04-224316654.png"
+      src="https://i.ibb.co/Nx37JfH/image-2024-03-22-004420115.png"
       class="logo"
       alt="logo"
       width="250"
@@ -65,11 +65,10 @@
   }
   a {
     margin-left: 10px;
-    color: white;
     font-weight: normal;
   }
   .header-container {
-    background-color: #232327;
+    background-color: var(--darkest-blue);
   }
   .logo {
     display: inline-block;

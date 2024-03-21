@@ -44,4 +44,7 @@
 
 <style>
         @import './style.css';
+        h3 {
+            color: var(--darkest-blue);
+        }
 </style>
