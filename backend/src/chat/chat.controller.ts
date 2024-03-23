@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
-import { LocalAuthGuard } from 'src/auth/local.auth.guard';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 
 @Controller('chat')

@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
-import { LocalAuthGuard } from 'src/auth/local.auth.guard';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 
 @Controller('message')

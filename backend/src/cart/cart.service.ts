@@ -5,7 +5,6 @@ import { Repository } from "typeorm";
 import { User } from "src/users/entities/user.entity";
 import { Transactional } from "typeorm-transactional";
 import { CreateCartDto } from "./dto/create-cart.dto";
-import { Product } from "src/models/product.entity";
 import { CartStatus } from "src/models/cart-status.enum";
 @Injectable()
 export class CartService {
@@ -14,9 +13,7 @@ export class CartService {
         @InjectRepository(Cart)
         private cartRepository: Repository<Cart>,
         @InjectRepository(User)
-        private userRepository: Repository<User>,
-        @InjectRepository(Product)
-        private productRepository: Repository<Product>,
+        private userRepository: Repository<User>
     ) { }
 
     @Transactional()

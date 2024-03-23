@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, Logger } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { NewsletterService } from './newsletter.service';
 import { CreateNewsletterDto } from './dto/create-newsletter.dto';
 
@@ -10,14 +10,6 @@ export class NewsletterController {
   async create(@Body() createNewsletterDto: CreateNewsletterDto) {
     return await this.newsletterService.create(createNewsletterDto);
   }
-  // @Post()
-  // async create(@Body() createNewsletterDto: CreateNewsletterDto) {
-  //   try {
-  //     return await this.newsletterService.create(createNewsletterDto);
-  //   } catch (error) {
-  //     throw new HttpException(error.message, error.status);
-  //   }
-  // }
 
   @Get()
   findAll() {

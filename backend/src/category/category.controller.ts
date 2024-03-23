@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { LocalAuthGuard } from 'src/auth/local.auth.guard';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 
 @Controller('category')

@@ -1,14 +1,13 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
-import {CreateProductDto} from './dto/create-product.dto';
-import {UpdateProductDto} from './dto/update-product.dto';
-import {Product} from './entities/product.entity';
-import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
-import { MoreThan } from 'typeorm';
-import {Category} from 'src/models/category.entity';
-import {Transactional} from 'typeorm-transactional';
-import {ProductCreatedEvent} from "./events/product-created.event";
-import {ProductEventsService} from "./product-events.service";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MoreThan, Repository } from 'typeorm';
+import { Category } from 'src/models/category.entity';
+import { Transactional } from 'typeorm-transactional';
+import { ProductCreatedEvent } from "./events/product-created.event";
+import { ProductEventsService } from "./product-events.service";
+import { Product } from "../models/product.entity";
 
 @Injectable()
 export class ProductService {

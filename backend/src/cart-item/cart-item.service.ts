@@ -18,6 +18,7 @@ export class CartItemService {
     private cartRepository: Repository<Cart>,
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+
   ) {}
 
   async create(createCartItemDto: CreateCartItemDto): Promise<CartItem> {
