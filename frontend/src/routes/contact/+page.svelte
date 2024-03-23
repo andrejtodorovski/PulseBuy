@@ -29,9 +29,9 @@
 
 <div class="container my-5">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 min-height-35vh">
       <div class="card">
-        <div class="card-body">
+        <div class="card-body p-5">
           <h5 class="card-title">Contact Us</h5>
           <p class="card-text">
             <strong>Address:</strong> 123 Main Street, Anytown, AN 12345
@@ -42,6 +42,8 @@
       </div>
     </div>
     <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
       <form on:submit|preventDefault={sendContact}>
         <div class="mb-3">
           <label for="email" class="form-label">Email address</label>
@@ -75,6 +77,8 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+    </div>
+  </div>
       {#if message}
         <p>{message}</p>
       {/if}
@@ -84,3 +88,9 @@
     </div>
   </div>
 </div>
+
+<style>
+  .card-body {
+    min-height: 52vh;
+  }
+</style>

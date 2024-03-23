@@ -25,12 +25,12 @@
   };
 </script>
 
-<footer class="text-center text-white p-4 mt-5">
+<footer class="text-center p-4 mt-5">
   <div class="container pb-3">
     <div class="row d-flex justify-content-center">
       <div class="col-md-4 pt-2">
         <img
-          src="https://i.ibb.co/1sYbSM7/image-2024-03-04-224316654.png"
+          src="https://i.ibb.co/Nx37JfH/image-2024-03-22-004420115.png"
           class="logo"
           alt="logo"
           width="250"
@@ -62,14 +62,14 @@
       </div>
     </div>
   </div>
-  <div class="text-center p-1">© 2024 Copyright: PulseBuy</div>
+  <div class="text-center p-1"><span>© 2024 Copyright: PulseBuy</span></div>
 </footer>
 
 <style>
   footer {
-    background-color: #232327;
+    background-color: var(--darkest-blue);
   }
-  a {
-    color: white;
+  span, h5 {
+    color: var(--gray);
   }
 </style>

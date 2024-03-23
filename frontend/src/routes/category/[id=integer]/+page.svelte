@@ -3,10 +3,14 @@
     import type { Category } from "../../../models/category";
     import { page } from "$app/stores";
     import CategoriesRepository from "../../../repository/categoriesRepository";
+    import { isUserLogged } from '../../../helpers/helpers';
+    import { goto } from '$app/navigation';
 
     let category: Category | undefined;
 
     onMount(async () => {
+        $isUserLogged || goto('/login');
+
         const categoryId = $page.params.id;
 
         CategoriesRepository.fetchCategorytById(categoryId).then((data) => {

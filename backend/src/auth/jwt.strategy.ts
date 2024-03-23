@@ -5,16 +5,15 @@ import { UsersService } from '../users/users.service'; // Adjust the import path
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() { // Inject UsersService if needed for fetching user details
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET || 'yourSecretKey', // It's safer to use environment variables for secrets
+      secretOrKey: 'secretKey',
     });
   }
 
   async validate(payload: any) {
-    // Optionally, add more logic here, e.g., loading a user profile
     return { userId: payload.sub, username: payload.username };
   }
 }

@@ -5,6 +5,10 @@
     import CartItemRepository from '../../repository/cartItemRepository';
     import {type Cart, CreateCartDto} from '../../models/cart';
     import type {CartItem} from '../../models/cart-item';
+    import { isUserLogged, isUserLoggedIn } from '../../helpers/helpers';
+    import { goto } from '$app/navigation';
+
+
 
     const cartItems = writable<CartItem[]>([]);
     let cart: Cart;
@@ -57,6 +61,8 @@
 
 
     onMount(() => {
+        isUserLoggedIn() || goto('/login');
+
         loadUserCart();
     });
 </script>

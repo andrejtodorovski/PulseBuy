@@ -4,6 +4,8 @@
     import type {PageData} from "./$types"
     import ProductsRepository from "../../../repository/productsRepository";
     import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
+    import { isUserLogged } from '../../../helpers/helpers';
 
     export let data: PageData
 
@@ -11,7 +13,9 @@
     let createProductDto = new CreateProductDto();
 
     let message: string | undefined;
-
+    onMount(async () => {
+        $isUserLogged || goto('/login');
+    });
     const addProduct = async () => {
         try {
             const res = await ProductsRepository.addNewProduct(createProductDto);

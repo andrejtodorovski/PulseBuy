@@ -3,10 +3,13 @@
     import type {Product} from "../../../models/products";
     import {page} from "$app/stores";
     import ProductsRepository from "../../../repository/productsRepository";
+    import { goto } from '$app/navigation';
+    import { isUserLogged, isUserLoggedIn } from '../../../helpers/helpers';
 
     let product: Product | undefined;
 
     onMount(async () => {
+        isUserLoggedIn() || goto('/login');
         const productId = $page.params.id;
 
         ProductsRepository.fetchProductById(productId).then((data) => {
@@ -16,7 +19,7 @@
         });
     });
 </script>
-
+{#if product}
 <div class="product-details">
     <div class="product-image">
         <img src={product?.imageURL} alt={product?.name}/>
@@ -28,7 +31,7 @@
         <p class="price">Price: ${product?.price}</p>
     </div>
 </div>
-
+{/if}
 <style>
     @import "./style.css";
 </style>

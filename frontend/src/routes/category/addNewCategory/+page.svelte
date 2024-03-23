@@ -3,6 +3,8 @@
     import type {PageData} from "./$types";
     import CategoriesRepository from "../../../repository/categoriesRepository";
     import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
+    import { isUserLogged, isUserLoggedIn } from '../../../helpers/helpers';
 
     export let data: PageData;
 
@@ -10,7 +12,10 @@
     let createCategoryDto = new CreateCategorytDto();
 
     let message: string | undefined;
+    onMount(async () => {
+        isUserLoggedIn() || goto('/login');
 
+        });
     const addCategory = async () => {
         try {
             const res = await CategoriesRepository.addNewCategory(createCategoryDto);

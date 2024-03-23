@@ -1,6 +1,4 @@
 <script lang="ts">
-  // import { session } from '$app/stores';
-  import { goto } from "$app/navigation";
   import { interceptedFetch, setAuthToken } from "../../helpers/helpers";
   let username: string;
   let password: string;
@@ -24,8 +22,6 @@
         setAuthToken(data.token);
         localStorage.setItem("userId", data.userId);
 
-        // $session.user = data.user;
-        // goto("/");
         window.location.href = "/";
       } else {
         const data = await res.json();
