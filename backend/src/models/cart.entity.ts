@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { User } from '../users/entities/user.entity';
+import { User } from './user.entity';
 
 import { CartStatus } from './cart-status.enum';
 
