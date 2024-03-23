@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CreateCartDto } from './dto/create-cart.dto';
-import { LocalAuthGuard } from 'src/auth/local.auth.guard';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 
 @Controller('cart')
@@ -28,12 +27,12 @@ export class CartController {
   remove(@Param('id') id: string) {
     return this.cartService.remove(+id);
   }
-  
+
   @Get('user/:id')
     findByUser(@Param('id') id: string) {
         return this.cartService.findByUser(+id);
     }
-    
+
   @Patch('change-status/:id')
   changeStatus(@Param('id') id: string) {
     return this.cartService.changeStatus(+id);

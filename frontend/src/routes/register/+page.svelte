@@ -67,7 +67,7 @@
 <div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <div class="card">
+      <div class="card custom-card">
         <div class="card-body">
           <form on:submit|preventDefault={register}>
             {#if message}

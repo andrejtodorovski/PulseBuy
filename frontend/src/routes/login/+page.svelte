@@ -1,5 +1,6 @@
 <script lang="ts">
   import { interceptedFetch, setAuthToken } from "../../helpers/helpers";
+  import "../../styles/global.css";
   let username: string;
   let password: string;
   let error: string | undefined;
@@ -36,12 +37,12 @@
 
 <div class="container mt-4 w-50">
   <div
-    class="p-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md w-full"
+    class="p-4 max-w-sm custom-card rounded-lg border border-gray-200 shadow-md w-full"
   >
     <form class="space-y-6" on:submit|preventDefault={login}>
       <div class="d-flex align-items-center mb-3">
         <a class="me-3" href="/"><i class="bi bi-arrow-left"></i></a>
-        <h2 class="text-xl font-medium">Login</h2>
+        <h3 class="text-xl font-medium">Login</h3>
       </div>
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>

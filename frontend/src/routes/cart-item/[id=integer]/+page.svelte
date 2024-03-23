@@ -7,18 +7,20 @@
     import { CreateCartItemDto } from '../../../models/cart-item';
     import CartRepository from '../../../repository/cartRepository';
     import CartItemRepository from '../../../repository/cartItemRepository';
-    import type {Cart} from '../../../models/cart';  
+    import type {Cart} from '../../../models/cart';
         import type { PageData } from '../$types';
-    import { isUserLogged, isUserLoggedIn } from '../../../helpers/helpers';
+    import { isUserLoggedIn } from '../../../helpers/helpers';
+    import "../../../styles/global.css";
+
     export let data: PageData;
-  
+
     let product : Product;
     let message: string | undefined;
     let cart : Cart;
-  
+
     const productId = $page.params.id;
    let  createCartItemDto = new CreateCartItemDto();
-  
+
    onMount(async () => {
     isUserLoggedIn() || goto('/login');
 
@@ -30,7 +32,7 @@
       } else {
         message = "Failed to load product details.";
       }
-      
+
       let userId : string =  localStorage.getItem('userId') ?? '';
       const cartResponse = await CartRepository.getCartByUser(userId);
       if (cartResponse.ok) {
@@ -38,7 +40,7 @@
 
       } else {
         message = "Failed to load user cart.";
-        
+
       }
     } catch (err) {
       message = "An error occurred while fetching details.";
@@ -62,24 +64,24 @@ createCartItemDto.cartId = cart.id;
           message = "An error occurred while adding product to cart.";
         }
     };
-  
+
     const goBack = () => {
       goto('/products');
     };
   </script>
-  
+
   <svelte:head>
     <title>Add to Cart</title>
   </svelte:head>
-  
-  <div class="container mt-4 w-80">
-    <div class="p-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md w-full">
+
+  <div class="container mt-4 w-50">
+    <div class="p-4 max-w-sm custom-card rounded-lg border border-gray-200 shadow-md w-full">
       {#if product}
-        <h2 class="text-xl font-medium">{product.name}</h2>
+        <h3 class="text-xl font-medium">{product.name}</h3>
         <p>Price: ${product.price}</p>
         <label for="quantity">Quantity:</label>
         <input type="number" min="1" class="form-control" id="quantity" bind:value={createCartItemDto.quantity} />
-  
+
         <button class="btn btn-primary mt-2" on:click|preventDefault={addToCart}>Add to Cart</button>
         <button class="btn btn-secondary mt-2" on:click|preventDefault={goBack}>Back</button>
       {:else}
@@ -87,6 +89,3 @@ createCartItemDto.cartId = cart.id;
       {/if}
     </div>
   </div>
-  <style>
-    @import '../style.css'
-  </style>

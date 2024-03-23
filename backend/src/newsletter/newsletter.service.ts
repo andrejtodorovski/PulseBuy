@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotAcceptableException, } from '@nestjs/common';
 import { CreateNewsletterDto } from './dto/create-newsletter.dto';
 import { Newsletter } from 'src/models/newsletter.entity';
 import { Repository } from 'typeorm';
@@ -11,22 +11,20 @@ export class NewsletterService {
     @InjectRepository(Newsletter)
     private newsletterRepositorty: Repository<Newsletter>,
   ) {}
-  create(createNewsletterDto: CreateNewsletterDto) {
-    this.newsletterRepositorty
-      .findOne({
-        where: {
-          email: createNewsletterDto.email,
-        },
-      })
-      .then((res) => {
-        if (res) {
-          this.logger.error('Email already subscribed to the newsletter');
-        } else {
-          const newsletter =
-            this.newsletterRepositorty.create(createNewsletterDto);
-          return this.newsletterRepositorty.save(newsletter);
-        }
-      });
+  async create(createNewsletterDto: CreateNewsletterDto) {
+    const existingNewsletter = await this.newsletterRepositorty.findOne({
+      where: {
+        email: createNewsletterDto.email,
+      },
+    });
+    if (existingNewsletter) {
+      this.logger.error('Email already subscribed to the newsletter');
+      throw new NotAcceptableException(
+        'Email already subscribed to the newsletter',
+      );
+    }
+    const newsletter = this.newsletterRepositorty.create(createNewsletterDto);
+    return this.newsletterRepositorty.save(newsletter);
   }
 
   findAll() {
@@ -34,7 +32,13 @@ export class NewsletterService {
   }
 
   remove(id: number) {
-    this.newsletterRepositorty.delete(id);
-    return 'You have been unsubscribed from the newsletter'
+    this.newsletterRepositorty.delete(id).then(r => {
+      if (r.affected === 0) {
+        throw new NotAcceptableException(
+            'Email not found in the newsletter list',
+        );
+      }
+      return 'You have been unsubscribed from the newsletter';
+    });
   }
 }
