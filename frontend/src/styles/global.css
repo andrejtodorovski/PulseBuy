@@ -73,3 +73,19 @@ a {
 .phone-actions a {
   color: var(--darkest-blue);
 }
+
+.custom-card {
+  background-color: var(--dark-blue);
+}
+
+label {
+    color: var(--gray);
+}
+
+h3 {
+    color: var(--gray);
+}
+
+p {
+    color: var(--gray);
+}

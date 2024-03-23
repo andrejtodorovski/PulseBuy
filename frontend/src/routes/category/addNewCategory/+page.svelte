@@ -37,11 +37,11 @@
     <title>Add Category</title>
 </svelte:head>
 
-<div class="container mt-4 w-80">
-    <div class="p-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md w-full">
+<div class="container mt-4 w-50">
+    <div class="p-4 max-w-sm custom-card rounded-lg border border-gray-200 shadow-md w-full">
         <form on:submit|preventDefault={addCategory}>
             <div class="d-flex align-items-center mb-3">
-                <h2 class="text-xl font-medium">Add New Category</h2>
+                <h3 class="text-xl font-medium">Add New Category</h3>
             </div>
             <div class="form-group">
                 <label for="categoryName">Category Name:</label>
