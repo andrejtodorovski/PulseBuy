@@ -11,8 +11,8 @@ export class CartItemController {
   constructor(private readonly cartItemService: CartItemService) {}
 
   @Post()
-  create(@Body() createCartItemDto: CreateCartItemDto) {
-    return this.cartItemService.create(createCartItemDto);
+  async create(@Body() createCartItemDto: CreateCartItemDto) {
+    return await this.cartItemService.create(createCartItemDto);
   }
 
   @Get()

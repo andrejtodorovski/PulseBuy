@@ -46,7 +46,9 @@ export class ProductService {
     }
 
     async findAll(): Promise<ProductInfoResponse[]> {
-        const products = await this.productsRepository.find();
+        const products = await this.productsRepository.find({
+            relations: ['category']}
+        );
         const productsInfo = products.map(async product => {
             const sales = await this.saleService.findAllByProductId(product.id);
             const currentSales = sales.filter(sale => sale.date_from <= new Date() && sale.date_to >= new Date());
