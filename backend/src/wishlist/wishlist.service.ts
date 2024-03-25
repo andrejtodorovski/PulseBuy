@@ -32,10 +32,16 @@ export class WishlistService {
         return await this.wishlistRepository.save(wishlist);
     }
 
-    findAllByUserId(userId: number) {
-        return this.wishlistRepository.find({
+    async findAllByUserId(userId: number) {
+        const wishlistItems = await this.wishlistRepository.find({
             where: {user: {id: userId}},
             relations: ['product', 'user']
+        });
+        return wishlistItems.map(wishlistItem => {
+            return {
+                id: wishlistItem.id,
+                product: wishlistItem.product,
+            }
         });
     }
 

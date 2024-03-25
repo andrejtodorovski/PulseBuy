@@ -3,10 +3,10 @@ export class CreateCartItemDto {
     productId: number;
     quantity: number;
 
-    constructor() {
-        this.cartId = 0;
-        this.productId = 0;
-        this.quantity = 0;
+    constructor(cartId: number = 0, productId: number = 0, quantity: number = 1) {
+        this.cartId = cartId;
+        this.productId = productId;
+        this.quantity = quantity;
     }
     
 }
