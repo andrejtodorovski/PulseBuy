@@ -3,17 +3,35 @@ export class CreateCartItemDto {
     productId: number;
     quantity: number;
 
-    constructor() {
-        this.cartId = 0;
-        this.productId = 0;
-        this.quantity = 0;
+    constructor(cartId: number = 0, productId: number = 0, quantity: number = 1) {
+        this.cartId = cartId;
+        this.productId = productId;
+        this.quantity = quantity;
     }
     
+}
+
+export class UpdateCartItemDto {
+    quantity: number;
+
+    constructor() {
+        this.quantity = 0;
+    }
+
 }
 export interface CartItem {
     id: number;
     cartId: number;
-    prodictId: number;
+    product: Product;
     quantity: number;
 
+}
+
+export interface Product {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    imageURL: string;
+    createdAt: Date;
 }

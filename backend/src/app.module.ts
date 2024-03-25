@@ -22,6 +22,9 @@ import { TasksModule } from './tasks/tasks.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NewsletterModule } from './newsletter/newsletter.module';
+import { SaleModule } from './sale/sale.module';
+import { SaleEventsService } from './sale/sale-events.service';
+import { WishlistModule } from './wishlist/wishlist.module';
 import * as process from "process";
 
 @Module({
@@ -104,8 +107,10 @@ import * as process from "process";
       inject: [ConfigService],
     }),
     NewsletterModule,
+    SaleModule,
+    WishlistModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SaleEventsService],
 })
 export class AppModule {}

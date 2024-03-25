@@ -34,12 +34,12 @@
 
 
         try {
-
             const res = await CartItemRepository.createCartItem(createCartItemDto);
             if (res.ok) {
                 toasts.success('Product added to cart');
             } else {
-                toasts.error('An error occurred while adding product to cart.');
+                const errorMessage = await res.json();
+                toasts.error(errorMessage.message);
             }
         } catch (err) {
             toasts.error('An error occurred while adding product to cart.');

@@ -64,3 +64,7 @@
     font-size: 16px;
     color: #666;
   }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
