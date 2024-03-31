@@ -6,7 +6,7 @@ import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {Category} from 'src/models/category.entity';
 import {Transactional} from 'typeorm-transactional';
-import {ProductCreatedEvent} from "./events/product-created.event";
+import {ProductCreatedEvent, ProductUpdatedEvent} from "./events/product.event";
 import {ProductEventsService} from "./product-events.service";
 
 @Injectable()
@@ -73,6 +73,10 @@ export class ProductService {
             ...updateProductDto,
             category: newCategory,
         });
+
+        const productUpdatedEvent = new ProductUpdatedEvent(product.id);
+        this.productEventsService.emitProductEvent(productUpdatedEvent);
+
         return await this.productsRepository.save(updatedProduct);
     }
 

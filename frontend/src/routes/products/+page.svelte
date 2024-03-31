@@ -1,6 +1,6 @@
 <script type="ts">
 
-    import {onMount} from "svelte";
+    import {onDestroy, onMount} from "svelte";
     import {io} from "$lib/webSocketConnection";
     import {load} from "./+page";
 
@@ -8,12 +8,29 @@
     export let data;
 
     onMount(() => {
-        io.on("ProductCreatedEvent", (event) => {
+        const roomId = "Product"
+
+        io.emit("joinRoom", roomId);
+
+        io.on("Product.ProductCreatedEvent", (event) => {
+            load().then((newData) => {
+                data = newData;
+            })
+        })
+
+        io.on("Product.ProductUpdatedEvent", (event) => {
             load().then((newData) => {
                 data = newData;
             })
         })
     })
+
+    onDestroy(() => {
+        // Leave the room when the component is unmounted
+        const roomId = 'Product';
+
+        io.emit('leaveRoom', roomId);
+    });
 
 </script>
 

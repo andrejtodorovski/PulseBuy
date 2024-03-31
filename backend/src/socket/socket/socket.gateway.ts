@@ -18,5 +18,7 @@ export class SocketGateway implements OnGatewayConnection {
         this.socketService.broadcastMessage(event, data);
     }
 
-    // Implement other Socket.IO event handlers and message handlers
+    sendEventToRoom(roomId: string, event: string, data: any): void {
+        this.socketService.broadcastMessageToRoom(roomId, event, data);
+    }
 }

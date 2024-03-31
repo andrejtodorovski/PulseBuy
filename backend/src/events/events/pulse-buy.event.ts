@@ -6,4 +6,10 @@ export abstract class PulseBuyEvent {
         this.id = id;
         this.eventType = this.constructor.name;
     }
+
+    abstract getAggregateType(): string;
+
+    getEventType(): string {
+        return `${this.getAggregateType()}.${this.eventType}`;
+    }
 }

@@ -1,35 +1,34 @@
 export const setAuthToken = (token: string) => {
-  sessionStorage.setItem("AuthorizationToken", `Bearer ${token}`);
+    sessionStorage.setItem("AuthorizationToken", `Bearer ${token}`);
 };
 
 export async function interceptedFetch(input: string, init: any) {
-  const apiURL = import.meta.env.VITE_API_URL;
-  console.log(apiURL);
+    const apiURL = import.meta.env.VITE_API_URL;
 
-  const token = getAuthToken();
-  if (token) {
-    if (!init.headers) {
-      init.headers = {};
+    const token = getAuthToken();
+    if (token) {
+        if (!init.headers) {
+            init.headers = {};
+        }
+        init.headers.Authorization = token;
     }
-    init.headers.Authorization = token;
-  }
-  return fetch(apiURL + input, init);
+    return fetch(apiURL + input, init);
 }
 
 export const removeAuthToken = () => {
-  sessionStorage.removeItem("AuthorizationToken");
-  localStorage.removeItem("userId");
-  window.location.reload();
+    sessionStorage.removeItem("AuthorizationToken");
+    localStorage.removeItem("userId");
+    window.location.reload();
 };
 
 export const getAuthToken = () => {
-  if (typeof sessionStorage !== 'undefined' && sessionStorage !== null) {
-    return sessionStorage.getItem("AuthorizationToken");
-  } else {
-    return null;
-  }
+    if (typeof sessionStorage !== 'undefined' && sessionStorage !== null) {
+        return sessionStorage.getItem("AuthorizationToken");
+    } else {
+        return null;
+    }
 };
 
 export const isUserLoggedIn = () => {
-  return getAuthToken() !== null;
+    return getAuthToken() !== null;
 };
