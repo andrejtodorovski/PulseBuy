@@ -6,7 +6,7 @@ export async function load({ fetch, params }) {
 
   if (res.ok) {
     return {
-      products: products,
+      products: products.slice(0,4),
     };
   }
 

@@ -84,4 +84,11 @@
     height: 38rem;
     object-fit: cover;
   }
+  .container {
+  background-color: var(--gray);
+  padding: 2rem;
+}
+h1 {
+  color: var(--darkest-blue);
+}
 </style>

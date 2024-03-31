@@ -1,13 +1,16 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {CreateProductDto} from './dto/create-product.dto';
 import {UpdateProductDto} from './dto/update-product.dto';
-import {Product} from './entities/product.entity';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
+import {MoreThan, Repository} from 'typeorm';
 import {Category} from 'src/models/category.entity';
 import {Transactional} from 'typeorm-transactional';
 import {ProductCreatedEvent, ProductUpdatedEvent} from "./events/product.event";
 import {ProductEventsService} from "./product-events.service";
+import {Product} from "../models/product.entity";
+import {ProductInfoResponse} from "./dto/product-info.response";
+import {SaleService} from "../sale/sale.service";
+import {Sale} from "../models/sale.entity";
 
 @Injectable()
 export class ProductService {
@@ -17,6 +20,7 @@ export class ProductService {
         @InjectRepository(Category)
         private categoryRepository: Repository<Category>,
         private productEventsService: ProductEventsService,
+        private saleService: SaleService
     ) {
     }
 
@@ -41,8 +45,43 @@ export class ProductService {
         return await this.productsRepository.save(product);
     }
 
-    findAll() {
-        return this.productsRepository.find();
+    async findAll(): Promise<ProductInfoResponse[]> {
+        const products = await this.productsRepository.find({
+                relations: ['category']
+            }
+        );
+        const productsInfo = products.map(async product => {
+            const sales = await this.saleService.findAllByProductId(product.id);
+            const currentSales = sales.filter(sale => sale.date_from <= new Date() && sale.date_to >= new Date());
+            return new ProductInfoResponse(
+                product.id,
+                product.name,
+                product.description,
+                product.price,
+                this.getPriceWithDiscountApplied(product.price, currentSales),
+                product.category.name,
+                product.imageURL
+            );
+        });
+        return Promise.all(productsInfo);
+    }
+
+    private getPriceWithDiscountApplied(price: number, sales: Sale[]): number {
+        let priceWithDiscountApplied = price;
+        sales.forEach(sale => {
+            priceWithDiscountApplied *= (1 - sale.percentage / 100);
+        });
+        return priceWithDiscountApplied;
+
+    }
+
+    findAllProductsAddedInLast24Hours() {
+        const twentyFourHoursAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        return this.productsRepository.find({
+            where: {
+                createdAt: MoreThan(twentyFourHoursAgo),
+            },
+        });
     }
 
     findOne(id: number) {

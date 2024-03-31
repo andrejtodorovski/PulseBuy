@@ -7,7 +7,7 @@
   <nav class="container d-flex align-items-center">
     <a href="/">
     <img
-      src="https://i.ibb.co/1sYbSM7/image-2024-03-04-224316654.png"
+      src="https://i.ibb.co/Nx37JfH/image-2024-03-22-004420115.png"
       class="logo"
       alt="logo"
       width="250"
@@ -16,9 +16,11 @@
     <div class="links">
       <a href="/">Home</a>
       <a href="/about-us">About Us</a>
+      {#if isUserLoggedIn()}
       <a href="/products">Products</a>
       <a href="/category">Categories</a>
       <a href="/orders">Orders</a>
+      {/if}
       <a href="/">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
           <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -30,7 +32,7 @@
             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
           </svg>
         </a>
-        <a href="/favorites">
+        <a href="/wishlist">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
           </svg>
@@ -63,11 +65,10 @@
   }
   a {
     margin-left: 10px;
-    color: white;
     font-weight: normal;
   }
   .header-container {
-    background-color: #232327;
+    background-color: var(--darkest-blue);
   }
   .logo {
     display: inline-block;

@@ -3,7 +3,7 @@ import type { SendContact } from "../models/contact";
 
 class ContactRepository {
   sendContact = (contact: SendContact): Promise<Response> => {
-    return interceptedFetch("http://localhost:3000/contact", {
+    return interceptedFetch("/contact", {
       method: "POST",
       body: JSON.stringify(contact),
       headers: {

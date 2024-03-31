@@ -4,6 +4,8 @@
     import type {PageData} from "./$types"
     import ProductsRepository from "../../../repository/productsRepository";
     import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
+    import { isUserLogged } from '../../../helpers/helpers';
 
     export let data: PageData
 
@@ -11,7 +13,9 @@
     let createProductDto = new CreateProductDto();
 
     let message: string | undefined;
-
+    onMount(async () => {
+        $isUserLogged || goto('/login');
+    });
     const addProduct = async () => {
         try {
             const res = await ProductsRepository.addNewProduct(createProductDto);
@@ -30,11 +34,11 @@
     <title>Add Product</title>
 </svelte:head>
 
-<div class="container mt-4 w-80">
-    <div class="p-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md w-full">
+<div class="container mt-4 w-50">
+    <div class="p-4 max-w-sm custom-card rounded-lg border border-gray-200 shadow-md w-full">
         <form on:submit|preventDefault={addProduct}>
             <div class="d-flex align-items-center mb-3">
-                <h2 class="text-xl font-medium">Add New Product</h2>
+                <h3 class="text-xl font-medium">Add New Product</h3>
             </div>
             <div class="form-group">
                 <label for="productName">Product Name:</label>

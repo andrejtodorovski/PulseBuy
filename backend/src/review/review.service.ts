@@ -31,8 +31,7 @@ export class ReviewService {
 
   async update(id: number, updateReviewDto: UpdateReviewDto): Promise<Review> {
     await this.reviewRepository.update(id, updateReviewDto);
-    const updatedReview = await this.findOne(id);
-    return updatedReview;
+    return await this.findOne(id);
   }
 
   async remove(id: number): Promise<void> {

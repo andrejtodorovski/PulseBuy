@@ -1,10 +1,11 @@
+import { writable } from "svelte/store";
+
 export const setAuthToken = (token: string) => {
     sessionStorage.setItem("AuthorizationToken", `Bearer ${token}`);
 };
 
 export async function interceptedFetch(input: string, init: any) {
     const apiURL = import.meta.env.VITE_API_URL;
-
     const token = getAuthToken();
     if (token) {
         if (!init.headers) {
@@ -32,3 +33,5 @@ export const getAuthToken = () => {
 export const isUserLoggedIn = () => {
     return getAuthToken() !== null;
 };
+
+export const isUserLogged = writable(getAuthToken());
