@@ -3,9 +3,8 @@ import { CreateSaleDto } from './dto/create-sale.dto';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Sale } from "../models/sale.entity";
-import { SaleCreatedEvent } from "./events/sale-created.event";
+import { SaleCreatedEvent } from "./events/sale.event";
 import { SaleEventsService } from "./sale-events.service";
-import { ProductService } from "../product/product.service";
 import { Product } from "../models/product.entity";
 
 @Injectable()
