@@ -87,10 +87,10 @@
             <p class="category">Category: {product?.category.name}</p>
             <p class="description">{product?.description}</p>
             <p class="price">Price: ${product?.price}</p>
+            <a href={`/products/${product?.id}/edit`} class="phone-card-link col-md-3">
+                Edit
+            </a>
         </div>
-        <a href={`/products/${product?.id}/edit`} class="phone-card-link col-md-3">
-            Edit
-        </a>
         <div class="add-to-cart">
             <h3 class="text-xl font-medium">{product.name}</h3>
             <p>Price: ${product.price}</p>
