@@ -38,7 +38,6 @@
         fetchProduct()
 
         io.on("Product.ProductUpdatedEvent", (event) => {
-            console.log("ProductUpdatedEvent", event)
             load().then((newData) => {
                 fetchProduct()
             })

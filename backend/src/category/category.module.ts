@@ -10,9 +10,5 @@ import {Category} from "../models/category.entity";
     providers: [CategoryService],
     exports: [CategoryService]
 })
-@Module({
-    controllers: [CategoryController],
-    providers: [CategoryService],
-})
 export class CategoryModule {
 }
