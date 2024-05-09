@@ -19,9 +19,9 @@ export class ReviewController {
     return this.reviewService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewService.findOne(+id);
+  @Get('/product/:productId')
+  findAllByProduct(@Param('productId') productId: string) {
+    return this.reviewService.findAllByProduct(+productId);
   }
 
   @Patch(':id')

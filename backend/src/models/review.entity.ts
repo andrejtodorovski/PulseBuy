@@ -26,4 +26,11 @@ export class Review {
     default: () => 'CURRENT_TIMESTAMP',
   })
   reviewDate: Date;
+
+    constructor(product: Product, user: User, rating: number, comment: string) {
+        this.product = product;
+        this.user = user;
+        this.rating = rating;
+        this.comment = comment;
+    }
 }

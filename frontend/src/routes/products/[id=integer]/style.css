@@ -5,6 +5,17 @@
     margin-top: 20px;
 }
 
+.product-reviews {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    flex-direction: column;
+}
+.review p {
+    color: var(--dark-blue);
+}
+
 .product-image {
     flex: 1;
     max-width: 400px;
