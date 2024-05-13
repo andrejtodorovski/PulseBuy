@@ -1,15 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { PULSE_BUY_EVENT } from "../events/constants";
-import { SaleEvent } from "./events/sale.event";
 import { SALE_MODULE_NAME } from "./constants";
+import { EventService } from "../notifications/event-notification/event.service";
 
 @Injectable()
-export class SaleEventsService {
-  constructor(private eventEmitter: EventEmitter2) {
-  }
-
-  emitSaleEvent(event: SaleEvent) {
-    this.eventEmitter.emit(`${PULSE_BUY_EVENT}.${SALE_MODULE_NAME}.${event.eventType}`, event);
+export class SaleEventsService extends EventService {
+  constructor(eventEmitter: EventEmitter2) {
+    super(eventEmitter, SALE_MODULE_NAME);
   }
 }

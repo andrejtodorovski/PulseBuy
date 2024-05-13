@@ -40,7 +40,7 @@ export class ProductService {
     });
 
     const productCreatedEvent = new ProductCreatedEvent(product.id);
-    this.productEventsService.emitProductEvent(productCreatedEvent);
+    this.productEventsService.emitEvent(productCreatedEvent);
 
     return await this.productsRepository.save(product);
   }
@@ -114,7 +114,7 @@ export class ProductService {
     });
 
     const productUpdatedEvent = new ProductUpdatedEvent(product.id);
-    this.productEventsService.emitProductEvent(productUpdatedEvent);
+    this.productEventsService.emitEvent(productUpdatedEvent);
 
     return await this.productsRepository.save(updatedProduct);
   }

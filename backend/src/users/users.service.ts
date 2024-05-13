@@ -33,7 +33,7 @@ export class UsersService {
       password: hashedPassword
     });
 
-    this.userEventsService.emitUsersEvent(new UserCreatedEvent(user.id, user));
+    this.userEventsService.emitEvent(new UserCreatedEvent(user.id, user));
 
     return this.usersRepository.save(user);
   }
