@@ -8,6 +8,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { NotificationManagerEntity } from "../models/notification-manager.entity";
 import { InAppNotificationEntity } from "../models/in-app-notification.entity";
 import { UserRegisteredListener } from "./listeners/user-registered.listener";
+import { InAppNotificationsListener } from "./listeners/in-app-notifications.listener";
 
 @Module({
   imports: [HtmlTemplateModule, UsersModule, TypeOrmModule.forFeature([NotificationManagerEntity, InAppNotificationEntity])],
@@ -15,7 +16,7 @@ import { UserRegisteredListener } from "./listeners/user-registered.listener";
     provide: "eventNotificationServices",
     useFactory: (defaultEventNotificationService: DefaultEventNotificationService) => [defaultEventNotificationService],
     inject: [DefaultEventNotificationService]
-  }, NotificationManagerService, UserRegisteredListener]
+  }, NotificationManagerService, UserRegisteredListener, InAppNotificationsListener]
 })
 export class NotificationsModule {
 }

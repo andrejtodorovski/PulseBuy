@@ -30,7 +30,7 @@ export class NotificationManagerService {
     }
     const inAppNotification = new InAppNotificationEntity(body, notificationManager);
 
-    if (notificationManager.inAppNotifications.length >= NotificationManagerEntity.MAX_NOTIFICATIONS_PER_USER) {
+    if (notificationManager.inAppNotifications && notificationManager.inAppNotifications.length >= NotificationManagerEntity.MAX_NOTIFICATIONS_PER_USER) {
       const shiftedNotification = notificationManager.inAppNotifications.shift();
       await this.inAppNotificationRepository.remove(shiftedNotification);
     }

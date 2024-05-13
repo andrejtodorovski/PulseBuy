@@ -1,4 +1,4 @@
 export enum HtmlTemplateContext {
-    EMAIL_NOTIFICATION = 'Email Notification',
-    CLIENT_NOTIFICATION = 'Client Notification',
+  EMAIL_NOTIFICATION = "Email Notification",
+  IN_APP_NOTIFICATION = "In App Notification",
 }
