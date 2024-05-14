@@ -4,7 +4,6 @@ import { CreateCartDto } from './dto/create-cart.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 
 @Controller('cart')
-@UseGuards(JwtAuthGuard)
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
@@ -14,30 +13,36 @@ export class CartController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.cartService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string) {
     return this.cartService.findOne(+id);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.cartService.remove(+id);
   }
 
   @Get('user/:id')
+  @UseGuards(JwtAuthGuard)
     findByUser(@Param('id') id: string) {
         return this.cartService.findByUser(+id);
     }
 
   @Patch('change-status/:id')
+  @UseGuards(JwtAuthGuard)
   changeStatus(@Param('id') id: string) {
     return this.cartService.changeStatus(+id);
   }
   @Get('user/ordered/:id')
+  @UseGuards(JwtAuthGuard)
   findByUserOrders(@Param('id') id: string) {
       return this.cartService.findByUserOrders(+id);
   }
