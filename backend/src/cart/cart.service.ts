@@ -51,19 +51,25 @@ export class CartService {
         status: CartStatus.IN_CART },
       });
     }
-    findByUserOrders(userId: number) {
-        const user = this.userRepository.findOne({
-            where: { id: userId },
-        }) as unknown as User;
-      return this.cartRepository.find({
-        where: { user ,
-        status: CartStatus.DELIVERED },
-      });
-    }
+    async findByUserOrders(userId: number) {
+        const user = await this.userRepository.findOne({
+          where: { id: userId },
+        });
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        return this.cartRepository.find({
+          where: {
+            user: user,
+            status: CartStatus.DELIVERED,
+          },
+        });
+      }
     remove(id: number) {
         return this.cartRepository.delete(id);
     }
-    changeStatus(id: number) {
-        return this.cartRepository.update(id, { status: CartStatus.DELIVERED });
+   async changeStatus(id: number) {
+        return await this.cartRepository.update(id, { status: CartStatus.DELIVERED });
       }
 }
