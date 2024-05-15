@@ -1,20 +1,40 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { Review } from 'src/models/review.entity';
+import { ProductService } from "../product/product.service";
+import { UsersService } from "../users/users.service";
 
 @Injectable()
 export class ReviewService {
   constructor(
     @InjectRepository(Review)
     private reviewRepository: Repository<Review>,
+    private productService: ProductService,
+    private userService: UsersService
   ) {}
 
   async create(createReviewDto: CreateReviewDto): Promise<Review> {
-    const review = this.reviewRepository.create(createReviewDto);
-    return this.reviewRepository.save(review);
+    const product = await this.productService.findOne(createReviewDto.productId);
+    const user = await this.userService.findById(createReviewDto.userId);
+
+    if (createReviewDto.rating < 1 || createReviewDto.rating > 5) {
+        throw new NotAcceptableException('Rating must be between 1 and 5');
+    }
+
+    const alreadyReviewed = await this.reviewRepository.findOne({
+      where: {
+        product: {id: product.id},
+        user: {id: user.id}
+      }
+    });
+    if (alreadyReviewed) {
+      throw new NotAcceptableException('You have already reviewed this product')
+    }
+    const review = this.reviewRepository.create(new Review(product, user, createReviewDto.rating, createReviewDto.comment));
+    return await this.reviewRepository.save(review);
   }
 
   async findAll(): Promise<Review[]> {
@@ -27,6 +47,10 @@ export class ReviewService {
       throw new NotFoundException(`Review #${id} not found`);
     }
     return review;
+  }
+
+  async findAllByProduct(productId: number): Promise<Review[]> {
+    return this.reviewRepository.find({where: {product: {id: productId}}, relations: ['product', 'user']});
   }
 
   async update(id: number, updateReviewDto: UpdateReviewDto): Promise<Review> {

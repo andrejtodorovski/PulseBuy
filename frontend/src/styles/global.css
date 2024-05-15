@@ -44,8 +44,8 @@ a {
 }
 
 .phone-image {
-  width: 100%;
-  height: auto;
+  width: 250px;
+  height: 250px;
   border-radius: 5px;
   object-fit: cover;
 }
@@ -88,4 +88,7 @@ h3 {
 
 p {
     color: var(--gray);
+}
+.text-dark-blue {
+    color: var(--dark-blue);
 }
