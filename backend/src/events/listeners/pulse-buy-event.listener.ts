@@ -11,6 +11,10 @@ export class PulseBuyEventListener {
 
     @OnEvent(`${PULSE_BUY_EVENT}.**`, {async: true})
     handlePulseBuyEvent(event: PulseBuyEvent): void {
-        this.socketGateway.sendEventToAllClients(event.eventType, event);
+        //this.socketGateway.sendEventToAllClients(event.eventType, event);
+        const specificAggregateRoomId = `${event.getAggregateType()}/${event.id}`;
+        const aggregateRoomId = event.getAggregateType();
+        this.socketGateway.sendEventToRoom(specificAggregateRoomId, event.getEventType(), event);
+        this.socketGateway.sendEventToRoom(aggregateRoomId, event.getEventType(), event);
     }
 }

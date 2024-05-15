@@ -17,6 +17,16 @@ export class SocketService {
         socket.on('message', (data) => {
             console.log('Received message:', data);
         });
+
+        // Handle joining room
+        socket.on('joinRoom', (roomId: string) => {
+            socket.join(roomId);
+        });
+
+        // Handle leaving room
+        socket.on('leaveRoom', (roomId: string) => {
+            socket.leave(roomId);
+        });
     }
 
     // Method to send a message to a specific client
@@ -33,6 +43,15 @@ export class SocketService {
     broadcastMessage(event: string, data: any): void {
         this.connectedClients.forEach((socket) => {
             socket.emit(event, data);
+        });
+    }
+
+    // Method to broadcast a message to all clients in a specific room
+    broadcastMessageToRoom(roomId: string, event: string, data: any): void {
+        this.connectedClients.forEach((socket) => {
+            if (socket.rooms.has(roomId)) {
+                socket.emit(event, data);
+            }
         });
     }
 }
