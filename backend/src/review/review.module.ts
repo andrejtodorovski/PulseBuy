@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
-import { ReviewService } from './review.service';
-import { ReviewController } from './review.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Review } from 'src/models/review.entity';
+import { Module } from "@nestjs/common";
+import { ReviewService } from "./review.service";
+import { ReviewController } from "./review.controller";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Review } from "src/models/review.entity";
 import { UsersService } from "../users/users.service";
 import { ProductService } from "../product/product.service";
 import { Product } from "../models/product.entity";
@@ -12,13 +12,15 @@ import { ProductEventsService } from "../product/product-events.service";
 import { Sale } from "../models/sale.entity";
 import { SaleService } from "../sale/sale.service";
 import { SaleEventsService } from "../sale/sale-events.service";
+import { UserEventsService } from "../users/user-events.service";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Review, User, Product, Category, Sale])
   ],
-  providers: [ReviewService, UsersService, ProductService, ProductEventsService, SaleService, SaleEventsService],
+  providers: [ReviewService, UsersService, ProductService, ProductEventsService, SaleService, SaleEventsService, UserEventsService],
   controllers: [ReviewController],
-  exports: [ReviewService],
+  exports: [ReviewService]
 })
-export class ReviewModule {}
+export class ReviewModule {
+}
