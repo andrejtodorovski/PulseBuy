@@ -132,10 +132,10 @@
           </svg>
         </a>
         <a class="cursor-pointer" on:click={toggleNotifications} style="position: relative;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-               class="bi bi-bell-fill" viewBox="0 0 16 16">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill"
+               viewBox="0 0 16 16">
             <path
-              d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.22-14a1 1 0 0 0-1.44 0 1 1 0 0 1-1.32.08A1 1 0 0 0 4.22 3a6 6 0 0 0-3 5.4 4 4 0 0 0 3.62 3.96c.19 1.07.85 1.99 1.78 2.4a2.11 2.11 0 0 0 2.78-2.4 4 4 0 0 0 3.62-3.96 6 6 0 0 0-3-5.4 1 1 0 0 0-1.44-.08A1 1 0 0 1 8.22 2z" />
+              d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901" />
           </svg>
           {#if unreadCount > 0}
             <span class="notification-badge">{unreadCount}</span>
