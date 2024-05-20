@@ -5,6 +5,7 @@
   import NotificationManagerRepository from "../repository/notificationManagerRepository.js";
   import { type InAppNotification, InAppNotificationStatus } from "../models/inAppNotification";
   import { io } from "$lib/webSocketConnection";
+  import { toasts } from "svelte-toasts";
 
   let showSearch = false;
   let search = "";
@@ -53,23 +54,24 @@
   }
 
   onMount(() => {
-    const roomId = `NotificationManager/${localStorage.getItem("userId")}`;
-
-    io.emit("joinRoom", roomId);
-
-    io.on("NotificationManager.NotificationAddedToManagerEvent", (event) => {
-      fetchNotifications();
-    });
-
-    io.on("NotificationManager.NotificationMarkedAsReadEvent", (event) => {
-      fetchNotifications();
-    });
-
-    io.on("NotificationManager.AllNotificationsMarkedAsReadForManagerEvent", (event) => {
-      fetchNotifications();
-    });
-
     if (isUserLoggedIn()) {
+      const roomId = `NotificationManager/${localStorage.getItem("userId")}`;
+
+      io.emit("joinRoom", roomId);
+
+      io.on("NotificationManager.NotificationAddedToManagerEvent", (event) => {
+        fetchNotifications();
+        toasts.success(event.message);
+      });
+
+      io.on("NotificationManager.NotificationMarkedAsReadEvent", (event) => {
+        fetchNotifications();
+      });
+
+      io.on("NotificationManager.AllNotificationsMarkedAsReadForManagerEvent", (event) => {
+        fetchNotifications();
+      });
+
       fetchNotifications();
     }
   });
