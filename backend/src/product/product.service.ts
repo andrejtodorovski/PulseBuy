@@ -39,7 +39,7 @@ export class ProductService {
       category: category
     });
 
-    const productCreatedEvent = new ProductCreatedEvent(product.id);
+    const productCreatedEvent = new ProductCreatedEvent(product.id, product.name);
     this.productEventsService.emitEvent(productCreatedEvent);
 
     return await this.productsRepository.save(product);
