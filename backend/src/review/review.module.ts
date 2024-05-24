@@ -12,12 +12,13 @@ import { ProductEventsService } from "../product/product-events.service";
 import { Sale } from "../models/sale.entity";
 import { SaleService } from "../sale/sale.service";
 import { SaleEventsService } from "../sale/sale-events.service";
+import { UserEventsService } from 'src/users/user-events.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Review, User, Product, Category, Sale])
   ],
-  providers: [ReviewService, UsersService, ProductService, ProductEventsService, SaleService, SaleEventsService],
+  providers: [ReviewService, UsersService, ProductService, ProductEventsService, SaleService, SaleEventsService, UserEventsService],
   controllers: [ReviewController],
   exports: [ReviewService],
 })
