@@ -142,7 +142,7 @@
         <div class="text-center"><button type="submit" class="btn btn-success" on:click|preventDefault={addReview}>Add review</button></div>
     </div>
     <div class="reviews">
-        {#if reviews.length > 0}
+        {#if reviews?.length > 0}
         {#each reviews as r}
         <div class="row mt-3 mb-3">
             <div class="col-1">
