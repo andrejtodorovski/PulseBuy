@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { NotificationStatus } from "./notification-status.enum";
-import { NotificationManagerEntity } from "./notification-manager.entity";
+import { NotificationManager } from "./notification-manager.entity";
 
 @Entity({ name: "in-app-notification" })
-export class InAppNotificationEntity {
+export class InAppNotification {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,10 +23,10 @@ export class InAppNotificationEntity {
   @Column()
   body: string;
 
-  @ManyToOne(() => NotificationManagerEntity)
-  notificationManager: NotificationManagerEntity;
+  @ManyToOne(() => NotificationManager, { eager: true })
+  notificationManager: NotificationManager;
 
-  constructor(body: string, notificationManager: NotificationManagerEntity) {
+  constructor(body: string, notificationManager: NotificationManager) {
     this.body = body;
     this.notificationManager = notificationManager;
     this.status = NotificationStatus.UNREAD;
