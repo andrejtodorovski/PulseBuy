@@ -1,5 +1,4 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity(
     { name: 'chats' }
@@ -8,9 +7,6 @@ export class Chat {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User)
-    sender: User;
-
-    @ManyToOne(() => User)
-    receiver: User;
+    @Column()
+    cookie: string;
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -23,6 +23,11 @@ export class MessageController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.messageService.findOne(+id);
+  }
+
+  @Get('chat/:cookie')
+  findAllMessagesInChat(@Param('cookie') cookie: string) {
+    return this.messageService.findAllMessagesInChat(cookie);
   }
 
   @Patch(':id')

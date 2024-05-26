@@ -4,29 +4,41 @@ import { Repository } from 'typeorm';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { Message } from 'src/models/message.entity';
+import { ChatService } from "../chat/chat.service";
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectRepository(Message)
     private messageRepository: Repository<Message>,
+    private chatService: ChatService
   ) {}
 
   async create(createMessageDto: CreateMessageDto): Promise<Message> {
-    const message = this.messageRepository.create(createMessageDto);
+    const chat = await this.chatService.getOrCreateChat(createMessageDto.cookie);
+
+    const message = this.messageRepository.create({
+        content: createMessageDto.content,
+        chat
+    });
     return this.messageRepository.save(message);
   }
 
   async findAll(): Promise<Message[]> {
-    return this.messageRepository.find({ relations: ['user', 'chat'] });
+    return this.messageRepository.find({ relations: ['chat'] });
   }
 
   async findOne(id: number): Promise<Message> {
-    const message = await this.messageRepository.findOne({where: { id }, relations: ['user', 'chat']});
+    const message = await this.messageRepository.findOne({where: { id }, relations: ['chat']});
     if (!message) {
       throw new NotFoundException(`Message #${id} not found`);
     }
     return message;
+  }
+
+  async findAllMessagesInChat(cookie: string): Promise<Message[]> {
+    const chat = await this.chatService.getOrCreateChat(cookie);
+    return this.messageRepository.find({ where: { chat }, relations: ['chat'] });
   }
 
   async update(id: number, updateMessageDto: UpdateMessageDto): Promise<Message> {

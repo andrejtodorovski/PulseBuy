@@ -1,5 +1,4 @@
 export class CreateMessageDto {
     content: string;
-    userId: number;
-    chatId: number;
+    cookie: string;
 }

@@ -2,52 +2,45 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateChatDto } from './dto/create-chat.dto';
-import { UpdateChatDto } from './dto/update-chat.dto';
 import { Chat } from 'src/models/chat.entity';
 
 @Injectable()
 export class ChatService {
-  constructor(
-    @InjectRepository(Chat)
-    private chatRepository: Repository<Chat>,
-  ) {}
-
-  async create(createChatDto: CreateChatDto): Promise<Chat> {
-    const chat = this.chatRepository.create({
-      sender: { id: createChatDto.senderId },
-      receiver: { id: createChatDto.receiverId },
-    });
-    return this.chatRepository.save(chat);
-  }
-
-  async findAll(): Promise<Chat[]> {
-    return this.chatRepository.find({ relations: ['sender', 'receiver'] });
-  }
-
-  async findOne(id: number): Promise<Chat> {
-    const chat = await this.chatRepository.findOne({ where: { id }, relations: ['sender', 'receiver'] });
-    if (!chat) {
-      throw new NotFoundException(`Chat #${id} not found`);
+    constructor(
+        @InjectRepository(Chat)
+        private chatRepository: Repository<Chat>,
+    ) {
     }
-    return chat;
-  }
 
-  async update(id: number, updateChatDto: UpdateChatDto): Promise<Chat> {
-    await this.chatRepository.update(id, {
-      sender: updateChatDto.senderId ? { id: updateChatDto.senderId } : undefined,
-      receiver: updateChatDto.receiverId ? { id: updateChatDto.receiverId } : undefined,
-    });
-    const updatedChat = await this.findOne(id);
-    if (!updatedChat) {
-      throw new NotFoundException(`Chat #${id} not found`);
+    async create(createChatDto: CreateChatDto): Promise<Chat> {
+        const chat = this.chatRepository.create({
+            cookie: createChatDto.cookie,
+        });
+        return this.chatRepository.save(chat);
     }
-    return updatedChat;
-  }
 
-  async remove(id: number): Promise<void> {
-    const result = await this.chatRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Chat #${id} not found`);
+    async findAll(): Promise<Chat[]> {
+        return this.chatRepository.find();
     }
-  }
+
+    async findOne(cookie: string): Promise<Chat> {
+        const chat = await this.chatRepository.findOne({
+            where: {
+                cookie: cookie
+            }
+        });
+        if (!chat) {
+            throw new NotFoundException(`Chat with cookie: #${cookie} not found`);
+        }
+        return chat;
+    }
+
+    async getOrCreateChat(cookie: string): Promise<Chat> {
+        let chat = await this.chatRepository.findOne({ where: { cookie } });
+        if (!chat) {
+            chat = this.chatRepository.create({ cookie });
+            chat = await this.chatRepository.save(chat);
+        }
+        return chat;
+    }
 }

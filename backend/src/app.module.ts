@@ -28,6 +28,7 @@ import {WishlistModule} from './wishlist/wishlist.module';
 import {NotificationsModule} from './notifications/notifications.module';
 import {HtmlTemplateModule} from './html-template/html-template.module';
 import * as process from "process";
+import { CookieController } from './cookie/cookie.controller';
 
 @Module({
     imports: [
@@ -114,7 +115,7 @@ import * as process from "process";
         HtmlTemplateModule,
         NotificationsModule,
     ],
-    controllers: [AppController],
+    controllers: [AppController, CookieController],
     providers: [AppService, SaleEventsService],
 })
 export class AppModule {
