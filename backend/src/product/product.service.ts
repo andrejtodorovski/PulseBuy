@@ -60,7 +60,8 @@ export class ProductService {
         product.price,
         this.getPriceWithDiscountApplied(product.price, currentSales),
         product.category.name,
-        product.imageURL
+        product.imageURL,
+        product.createdAt
       );
     });
     return Promise.all(productsInfo);

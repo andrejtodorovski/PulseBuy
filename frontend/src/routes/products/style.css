@@ -4,7 +4,28 @@
 }
 
 .disable {
-    color: #868e96!important;
+    color: #868e96 !important;
+}
+
+.filters {
+    gap: 1rem;
+}
+
+.filters input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.filters select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.page-link {
+    margin: 0 5px;
+    padding: 10px 15px;
 }
 
 .empty-message {
