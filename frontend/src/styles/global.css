@@ -54,6 +54,15 @@ a {
   color: var(--darkest-blue);
 }
 
+.phone-info {
+  margin-top: 10px;
+}
+
+.brand-name {
+  font-weight: bolder;
+  height: 55px;
+}
+
 .price-before-sale {
   color: var(--dark-blue);
   text-decoration: line-through;

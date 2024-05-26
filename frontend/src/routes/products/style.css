@@ -3,6 +3,10 @@
     text-align: center;
 }
 
+.disable {
+    color: #868e96!important;
+}
+
 .empty-message {
     color: #868e96;
     font-style: italic;

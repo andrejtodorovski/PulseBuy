@@ -37,7 +37,7 @@
                     class="phone-image"
             />
             <div class="phone-info">
-                <h3 class="brand-name">{product.name}</h3>
+                <h4 class="brand-name">{product.name}</h4>
                 <p class="model-name">{product.name}</p>
                 <p class="price-before-sale">{product.price}MKD</p>
                 <p class="new-price">{product.price}MKD</p>
