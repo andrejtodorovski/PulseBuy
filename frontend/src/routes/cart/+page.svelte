@@ -5,7 +5,7 @@
     import CartItemRepository from '../../repository/cartItemRepository';
     import { type Cart, CreateCartDto } from '../../models/cart';
     import type { CartItem } from '../../models/cart-item';
-    import { isUserLoggedIn } from '../../helpers/helpers';
+    import { getUserId, isUserLoggedIn } from '../../helpers/helpers';
     import { goto } from '$app/navigation';
     import { toasts } from "svelte-toasts";
 
@@ -14,7 +14,7 @@
     let total = 0;
 
     async function loadUserCart() {
-        const userId = localStorage.getItem('userId');
+        const userId = getUserId();
         if (!userId) return;
 
         const cartResponse = await CartRepository.getCartByUser(userId);
@@ -77,7 +77,7 @@
     async function orderProducts() {
         const currentCart = cart;
         let createCartDto: CreateCartDto = new CreateCartDto();
-        createCartDto.userId = Number(localStorage.getItem('userId')) ?? '';
+        createCartDto.userId = Number(getUserId());
         if (!currentCart) {
             toasts.error('No cart available to order.')
             return;

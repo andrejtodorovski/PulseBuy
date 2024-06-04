@@ -1,17 +1,17 @@
 <script lang="ts">
-    import { onDestroy, onMount} from 'svelte';
-    import type {Product} from "../../../models/products";
-    import {page} from "$app/stores";
+    import { onDestroy, onMount } from 'svelte';
+    import type { Product } from "../../../models/products";
+    import { page } from "$app/stores";
     import ProductsRepository from "../../../repository/productsRepository";
-    import {goto} from '$app/navigation';
-    import {isUserLoggedIn} from '../../../helpers/helpers';
-    import {CreateCartItemDto} from "../../../models/cart-item";
+    import { goto } from '$app/navigation';
+    import { getUserId, isUserAdmin, isUserLoggedIn } from '../../../helpers/helpers';
+    import { CreateCartItemDto } from "../../../models/cart-item";
     import CartItemRepository from "../../../repository/cartItemRepository";
     import CartRepository from "../../../repository/cartRepository";
-    import type {Cart} from "../../../models/cart";
-    import {toasts} from "svelte-toasts";
-    import {io} from "$lib/webSocketConnection";
-    import {load} from "../+page";
+    import type { Cart } from "../../../models/cart";
+    import { toasts } from "svelte-toasts";
+    import { io } from "$lib/webSocketConnection";
+    import { load } from "../+page";
     import ReviewRepository from "../../../repository/reviewRepository";
     import { CreateReviewDto, type Review } from "../../../models/review";
 
@@ -21,6 +21,7 @@
     let createCartItemDto = new CreateCartItemDto();
     let createReviewDto = new CreateReviewDto();
     const productId = $page.params.id;
+    let loggedInAndAdmin = isUserLoggedIn() && isUserAdmin();
 
     const fetchProduct = async () => {
         const productId = $page.params.id;
@@ -49,7 +50,7 @@
             })
         })
 
-        let userId : string =  localStorage.getItem('userId') ?? '';
+        let userId: string = getUserId() || '';
         const cartResponse = await CartRepository.getCartByUser(userId);
         cart = await cartResponse.json();
     });
@@ -64,7 +65,7 @@
 
     const addReview = async () => {
         createReviewDto.productId = Number(productId);
-        createReviewDto.userId = +(localStorage.getItem('userId') ?? 0);
+        createReviewDto.userId = Number(getUserId());
         try {
             const res = await ReviewRepository.addNewReview(createReviewDto);
             if (res.ok) {
@@ -116,9 +117,11 @@
             <p class="category">Category: {product?.category.name}</p>
             <p class="description">{product?.description}</p>
             <p class="price">Price: ${product?.price}</p>
-            <a href={`/products/${product?.id}/edit`} class="phone-card-link col-md-3">
-                Edit
-            </a>
+            {#if loggedInAndAdmin}
+                <a href={`/products/${product?.id}/edit`} class="phone-card-link col-md-3">
+                    Edit
+                </a>
+            {/if}
         </div>
         <div class="add-to-cart">
             <h3 class="text-xl font-medium">{product.name}</h3>
@@ -126,50 +129,53 @@
             <label for="quantity">Quantity:</label>
             <input type="number" min="1" class="form-control" id="quantity" bind:value={createCartItemDto.quantity}/>
 
-        <button class="btn btn-primary mt-2" on:click|preventDefault={addToCart}>Add to Cart</button>
-    </div>
-</div>
-<div class="product-reviews">
-    <h2>Reviews</h2>
-    <div class="add-review">
-        <h5>What do you think of this product? Share your experience to help others.</h5>
-        <div class="d-flex justify-content-around">
-            <input type="text" placeholder="What do you think of this product?"  bind:value={createReviewDto.comment}
-                   class="form-control w-50 mb-2"/>
-            <input type="number" min="1" max="5" placeholder="Rating"  bind:value={createReviewDto.rating}
-                   class="form-control w-25 mb-2" />
+            <button class="btn btn-primary mt-2" on:click|preventDefault={addToCart}>Add to Cart</button>
         </div>
-        <div class="text-center"><button type="submit" class="btn btn-success" on:click|preventDefault={addReview}>Add review</button></div>
     </div>
-    <div class="reviews">
-        {#if reviews?.length > 0}
-        {#each reviews as r}
-        <div class="row mt-3 mb-3">
-            <div class="col-1">
-                <img class="img-fluid"
-                     src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png" alt=""/>
+    <div class="product-reviews">
+        <h2>Reviews</h2>
+        <div class="add-review">
+            <h5>What do you think of this product? Share your experience to help others.</h5>
+            <div class="d-flex justify-content-around">
+                <input type="text" placeholder="What do you think of this product?" bind:value={createReviewDto.comment}
+                       class="form-control w-50 mb-2"/>
+                <input type="number" min="1" max="5" placeholder="Rating" bind:value={createReviewDto.rating}
+                       class="form-control w-25 mb-2"/>
             </div>
-            <div class="col-11 align-self-center">
-              <p class="text-dark-blue">{ r.user.fullName }</p>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success" on:click|preventDefault={addReview}>Add review</button>
             </div>
+        </div>
+        <div class="reviews">
+            {#if reviews?.length > 0}
+                {#each reviews as r}
+                    <div class="row mt-3 mb-3">
+                        <div class="col-1">
+                            <img class="img-fluid"
+                                 src="https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                                 alt=""/>
+                        </div>
+                        <div class="col-11 align-self-center">
+                            <p class="text-dark-blue">{ r.user.fullName }</p>
+                        </div>
 
-        </div>
-        <div class="d-flex mb-3">
-            <div class="d-inline-block">
-                {#each Array(r.rating) as _}
-                <img src="https://i.ibb.co/30NzvXX/star.png" alt="">
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="d-inline-block">
+                            {#each Array(r.rating) as _}
+                                <img src="https://i.ibb.co/30NzvXX/star.png" alt="">
+                            {/each}
+                        </div>
+                        <span class="text-muted ms-4">{new Date(r.reviewDate).toLocaleString()}</span>
+                    </div>
+                    <div class="mb-3">{r.comment}</div>
+                    <hr>
                 {/each}
-            </div>
-            <span class="text-muted ms-4">{new Date(r.reviewDate).toLocaleString()}</span>
+            {:else}
+                <p class="empty-message">No reviews available</p>
+            {/if}
         </div>
-        <div class="mb-3">{r.comment}</div>
-        <hr>
-        {/each}
-        {:else}
-        <p class="empty-message">No reviews available</p>
-        {/if}
     </div>
-</div>
 {/if}
 <style>
     @import "./style.css";

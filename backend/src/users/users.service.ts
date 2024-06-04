@@ -38,7 +38,19 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
+  async updatePermissions(id: number): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id }});
+    user.isAdmin = !user.isAdmin;
+    return this.usersRepository.save(user);
+  }
+
   findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+    return this.usersRepository.find(
+        {
+          order: {
+            id: "ASC"
+          }
+        }
+    );
   }
 }

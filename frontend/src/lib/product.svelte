@@ -4,11 +4,12 @@
   import WishlistRepository from "../repository/wishlistRepository";
   import { toasts } from "svelte-toasts";
   import { CreateWishlistDto } from "../models/wishlist";
+  import { getUserId } from "../helpers/helpers";
 
   export let product: Product;
 
   const addToWishlist = async () => {
-        const userId = localStorage.getItem("userId");
+        const userId = getUserId();
         if (!userId) {
             toasts.error("You need to be logged in to add products to wishlist");
             return;

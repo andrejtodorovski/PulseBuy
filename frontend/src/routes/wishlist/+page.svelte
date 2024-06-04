@@ -1,7 +1,7 @@
 <script lang="ts">
   import WishlistRepository from "../../repository/wishlistRepository";
   import { toasts } from "svelte-toasts";
-  import { isUserLoggedIn } from "../../helpers/helpers";
+  import { getUserId, isUserLoggedIn } from "../../helpers/helpers";
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import CartRepository from "../../repository/cartRepository";
@@ -16,14 +16,14 @@
 
   onMount(async () => {
     isUserLoggedIn() || goto("/login");
-    let userId: string = localStorage.getItem("userId") ?? "";
+    let userId: string = getUserId() || "";
     const cartResponse = await CartRepository.getCartByUser(userId);
     cart = await cartResponse.json();
     await load();
   });
 
   async function load() {
-    const userId = localStorage.getItem("userId"); //TODO() andrej
+    const userId = getUserId(); //TODO() andrej
     const res = await WishlistRepository.getWishlistForUserId(userId!);
     const response = await res.json();
 

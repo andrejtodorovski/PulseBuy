@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isUserLoggedIn, removeAuthToken } from "../helpers/helpers";
+  import { getUserId, isUserAdmin, isUserLoggedIn, removeAuthToken } from "../helpers/helpers";
   import "../styles/global.css";
   import { onMount } from "svelte";
   import NotificationManagerRepository from "../repository/notificationManagerRepository.js";
@@ -35,17 +35,17 @@
   }
 
   function markAllAsRead() {
-    const userId = localStorage.getItem("userId")!;
+    const userId = getUserId();
     NotificationManagerRepository.markAllNotificationsAsRead(userId);
   }
 
   function formatDate(dateString) {
-    const options = { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" };
+    const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" };
     return new Date(dateString).toLocaleDateString("en-US", options);
   }
 
   async function fetchNotifications() {
-    const res = await NotificationManagerRepository.getNotificationsForUser(localStorage.getItem("userId")!);
+    const res = await NotificationManagerRepository.getNotificationsForUser(getUserId()!);
     const nots = await res.json();
 
     if (res.ok) {
@@ -55,7 +55,7 @@
 
   onMount(() => {
     if (isUserLoggedIn()) {
-      const roomId = `NotificationManager/${localStorage.getItem("userId")}`;
+      const roomId = `NotificationManager/${getUserId()}`;
 
       io.emit("joinRoom", roomId);
 
@@ -93,7 +93,7 @@
       <span>
         <input type="text" class="form-control w-40 d-inline-block" placeholder="Search products..." bind:value={search}
                on:keydown={handleKeyDown}>
-        <a class="cursor-pointer" on:click={searchProducts}>
+        <a href="" class="cursor-pointer" on:click={searchProducts}>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                viewBox="0 0 16 16">
             <path
@@ -109,14 +109,21 @@
         <a href="/products">Products</a>
         <a href="/category">Categories</a>
         <a href="/orders">Orders</a>
-      {/if}
-      {#if isUserLoggedIn()}
-        <a href="/profile">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-               class="bi bi-person-fill" viewBox="0 0 16 16">
-            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+        {#if isUserAdmin()}
+        <a href="/admin">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16">
+            <path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+            <path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z"/>
           </svg>
         </a>
+          {:else}
+          <a href="/profile">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-person-fill" viewBox="0 0 16 16">
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+            </svg>
+          </a>
+        {/if}
         <a href="/wishlist">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -131,7 +138,7 @@
               d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
           </svg>
         </a>
-        <a class="cursor-pointer" on:click={toggleNotifications} style="position: relative;">
+        <a href="" class="cursor-pointer" on:click={toggleNotifications} style="position: relative;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill"
                viewBox="0 0 16 16">
             <path
@@ -145,10 +152,10 @@
               <button class="mark-all-read" on:click={markAllAsRead}>Mark all as read</button>
               <ul>
                 {#each notifications as notification}
-                  <li class:unread={notification.status == "UNREAD"}>
+                  <li class:unread={notification.status === "UNREAD"}>
                     <div>{notification.body}</div>
                     <div class="notification-date">{formatDate(notification.createdAt)}</div>
-                    {#if notification.status == "UNREAD"}
+                    {#if notification.status === "UNREAD"}
                       <button class="mark-read" on:click={() => markAsRead(notification.id)}>Mark as read</button>
                     {/if}
                   </li>

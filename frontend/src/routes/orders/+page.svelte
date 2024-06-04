@@ -5,15 +5,15 @@
     import CartItemRepository from '../../repository/cartItemRepository';
     import type {Cart} from '../../models/cart';
     import { goto } from '$app/navigation';
-    import { isUserLoggedIn } from '../../helpers/helpers';
+    import { getUserId, isUserLoggedIn } from '../../helpers/helpers';
 
     const orderedCarts = writable<Cart[]>([]);
 
     async function loadOrderedCarts() {
-        const userId = localStorage.getItem('userId');
+        const userId = getUserId()!;
         if (!userId) return;
 
-        const response = await CartRepository.getCartByUserOrdered(Number(userId));
+        const response = await CartRepository.getCartByUserOrdered(userId);
         const carts = await response.json();
 
         const cartsWithItemsPromises = carts.map(async (cart) => {

@@ -3,7 +3,7 @@
     import { io } from "$lib/webSocketConnection";
     import { load } from "./+page";
     import { goto } from "$app/navigation";
-    import { isUserLoggedIn } from "../../helpers/helpers";
+    import { isUserAdmin, isUserLoggedIn } from "../../helpers/helpers";
     import Product from "$lib/product.svelte";
     import { toasts } from "svelte-toasts";
 
@@ -16,6 +16,7 @@
     let productsLength = data.products.length;
     let numberOfPages = Math.ceil(productsLength / pageSize);
     let products = data.products.slice((page - 1) * pageSize, page * pageSize);
+    let loggedInAndAdmin = isUserLoggedIn() && isUserAdmin();
     applyFiltersAndSorting();
 
     function applyFiltersAndSorting() {
@@ -96,11 +97,13 @@
 </script>
 
 <div class="products container">
-    <div class="mb-5 d-flex justify-content-center align-items-center">
-        <a href="/products/addNewProduct" class="button-81 w-50">
-            <span class="icon">+</span> Add New Product
-        </a>
-    </div>
+    {#if loggedInAndAdmin}
+        <div class="mb-5 d-flex justify-content-center align-items-center">
+            <a href="/products/add-product" class="button-81 w-50">
+                <span class="icon">+</span> Add New Product
+            </a>
+        </div>
+    {/if}
 
     <div class="filters d-flex justify-content-center align-items-center mb-3">
         <input type="text" placeholder="Пребарувај по име.." on:input={handleFilterChange}/>
