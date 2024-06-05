@@ -152,7 +152,9 @@
         <button class="btn btn-primary" on:click={orderProducts}>Order Products</button>
 
     {:else}
-        <h2>Your cart is empty.</h2>
+    <div class="alert alert-info mt-4" role="alert">
+        Your cart is empty.
+      </div>
     {/if}
 </div>
 <style>
