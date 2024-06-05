@@ -1,21 +1,19 @@
-import {goto} from "$app/navigation";
-import {isUserLogged} from "../../helpers/helpers";
-import ProductsRepository from "../../repository/productsRepository";
+import categoriesRepository from "../../repository/categoriesRepository";
 
 export async function load() {
-    isUserLogged || goto('/login');
-    const res = await ProductsRepository.fetchProducts()
-    const products = await res.json()
+
+    const res = await categoriesRepository.fetchCategories()
+    const categories = await res.json()
 
     if (res.ok) {
         return {
-            products: products
+            categories: categories
         }
     }
 
     return {
-        products: [],
+        categories: [],
         status: res.status,
-        error: new Error('Could not fetch the products.')
+        error: new Error('Could not fetch the categories.')
     }
 }

@@ -1,6 +1,31 @@
-.categories {
+.products {
     margin-top: 20px;
     text-align: center;
+}
+
+.disable {
+    color: #868e96 !important;
+}
+
+.filters {
+    gap: 1rem;
+}
+
+.filters input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.filters select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.page-link {
+    margin: 0 5px;
+    padding: 10px 15px;
 }
 
 .empty-message {
@@ -41,49 +66,4 @@
         font-size: 1.125rem;
         padding: 1rem 2rem;
     }
-}
-
-/* Additional styles for categories list */
-.category-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px; /* Adjust based on preference */
-}
-
-.category-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: box-shadow 0.2s;
-    width: 300px; /* Adjust based on preference */
-}
-
-.category-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.category-info {
-    padding: 20px;
-}
-
-.category-name {
-    font-size: 20px;
-    margin: 0 0 10px;
-}
-
-.category-description {
-    font-size: 16px;
-    color: #666;
-    margin: 0;
-}
-
-.category-actions {
-    display: flex;
-    justify-content: center;
-    padding: 10px 0;
-}
-
-.category-actions a {
-    margin: 0 10px;
 }

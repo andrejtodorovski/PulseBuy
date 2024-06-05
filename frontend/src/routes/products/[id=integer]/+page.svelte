@@ -11,7 +11,7 @@
     import type { Cart } from "../../../models/cart";
     import { toasts } from "svelte-toasts";
     import { io } from "$lib/webSocketConnection";
-    import { load } from "../+page";
+    import { load } from "../category/[id=integer]/+page";
     import ReviewRepository from "../../../repository/reviewRepository";
     import { CreateReviewDto, type Review } from "../../../models/review";
 

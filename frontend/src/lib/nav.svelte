@@ -107,7 +107,6 @@
       <a href="/about-us">About Us</a>
       {#if isUserLoggedIn()}
         <a href="/products">Products</a>
-        <a href="/category">Categories</a>
         <a href="/orders">Orders</a>
         {#if isUserAdmin()}
         <a href="/admin">
