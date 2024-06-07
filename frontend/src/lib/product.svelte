@@ -1,14 +1,14 @@
 <script lang="ts">
-  import "../styles/global.css";
-  import type { Product } from "../models/products";
-  import WishlistRepository from "../repository/wishlistRepository";
-  import { toasts } from "svelte-toasts";
-  import { CreateWishlistDto } from "../models/wishlist";
-  import { getUserId } from "../helpers/helpers";
+    import "../styles/global.css";
+    import type { Product } from "../models/products";
+    import WishlistRepository from "../repository/wishlistRepository";
+    import { toasts } from "svelte-toasts";
+    import { CreateWishlistDto } from "../models/wishlist";
+    import { getUserId } from "../helpers/helpers";
 
-  export let product: Product;
+    export let product: Product;
 
-  const addToWishlist = async () => {
+    const addToWishlist = async () => {
         const userId = getUserId();
         if (!userId) {
             toasts.error("You need to be logged in to add products to wishlist");
@@ -40,8 +40,12 @@
             <div class="phone-info">
                 <h4 class="brand-name">{product.name}</h4>
                 <p class="model-name">{product.name}</p>
-                <p class="price-before-sale">{product.price}MKD</p>
-                <p class="new-price">{product.price}MKD</p>
+                {#if product.price.toString() === product.priceAfterDiscount.toString()}
+                    <p class="price-before-sale">{product.price}MKD</p>
+                {:else}
+                    <p class="price-before-sale price-line-through">{product.price}MKD</p>
+                    <p class="new-price">{product.priceAfterDiscount.toFixed(2)}MKD</p>
+                {/if}
             </div>
         </a>
         <div class="phone-actions">

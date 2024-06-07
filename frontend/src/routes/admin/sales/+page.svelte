@@ -2,46 +2,41 @@
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { interceptedFetch } from '../../../helpers/helpers';
+    import type { Product } from "../../../models/products";
 
-    interface Product {
+    interface Sale {
         id: number;
-        name: string;
-    }
-
-    interface CreateSaleDto {
         date_from: string;
         date_to: string;
         percentage: number;
-        productId: number;
+        isActive: boolean;
+        product: Product;
     }
 
-    const products = writable<Product[]>([]);
-    const newSale = writable<CreateSaleDto>({
-        date_from: '',
-        date_to: '',
-        percentage: 0,
-        productId: 0,
-    });
 
-    async function fetchProducts() {
-        const response = await interceptedFetch('/product', {});
+    const activeSales = writable<Sale[]>([]);
+    const inactiveSales = writable<Sale[]>([]);
+
+
+    async function fetchActiveSales() {
+        const response = await interceptedFetch('/sale/active', {});
         const data = await response.json();
-        products.set(data);
+        activeSales.set(data);
     }
 
-    async function createSale() {
-        const sale = $newSale;
-        await fetch('/api/sales', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(sale),
-        });
-        // Optionally reset form or handle success
+    async function fetchInactiveSales() {
+        const response = await interceptedFetch('/sale/inactive', {});
+        const data = await response.json();
+        inactiveSales.set(data);
     }
 
-    onMount(fetchProducts);
+
+    onMount(
+        async () => {
+            await fetchActiveSales();
+            await fetchInactiveSales();
+        }
+    );
 </script>
 
 <style>
@@ -49,52 +44,55 @@
         margin-top: 50px;
     }
 
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        box-sizing: border-box;
-    }
-
-    .form-submit {
-        margin-top: 20px;
+    .bold {
+        font-weight: bold;
     }
 </style>
-
 <div class="container">
-    <div class="custom-card">
-        <div class="card-header">
-            <h3>Add New Sale</h3>
+    <h1 class="text-center">Sales</h1>
+    <div class="row mt-5 mb-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-dark-blue text-center">Active Sales</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {#each $activeSales as sale}
+                        <li class="list-group-item">
+                            <div>
+                                <strong>{sale.product.name}</strong>
+                                <span class="text-dark-blue bold"> - {sale.percentage}% off</span>
+                            </div>
+                            <div>
+                                {sale.date_from} - {sale.date_to}
+                            </div>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
         </div>
-        <div class="card-body">
-            <form on:submit|preventDefault={createSale}>
-                <div class="form-group">
-                    <label for="product">Product</label>
-                    <select id="product" bind:value={$newSale.productId} class="form-control">
-                        <option value="" disabled selected>Select a product</option>
-                        {#each $products as product}
-                            <option value={product.id}>{product.name}</option>
-                        {/each}
-                    </select>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-dark-blue text-center">Inactive Sales</h3>
                 </div>
-                <div class="form-group">
-                    <label for="percentage">Sale Percentage</label>
-                    <input type="number" id="percentage" bind:value={$newSale.percentage} class="form-control" min="0"
-                           max="100"/>
-                </div>
-                <div class="form-group">
-                    <label for="date_from">Date From</label>
-                    <input type="date" id="date_from" bind:value={$newSale.date_from} class="form-control"/>
-                </div>
-                <div class="form-group">
-                    <label for="date_to">Date To</label>
-                    <input type="date" id="date_to" bind:value={$newSale.date_to} class="form-control"/>
-                </div>
-                <button type="submit" class="btn btn-primary form-submit">Add Sale</button>
-            </form>
+                <ul class="list-group list-group-flush">
+                    {#each $inactiveSales as sale}
+                        <li class="list-group-item">
+                            <div>
+                                <strong>{sale.product.name}</strong>
+                                <span class="text-dark-blue bold"> - {sale.percentage}% off</span>
+                            </div>
+                            <div>
+                                {sale.date_from} - {sale.date_to}
+                            </div>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
         </div>
+    </div>
+    <div class="center-kids">
+        <a class="btn btn-primary" href="/admin/add-sale">Add a new sale</a>
     </div>
 </div>

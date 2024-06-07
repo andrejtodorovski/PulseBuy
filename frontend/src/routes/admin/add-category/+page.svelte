@@ -1,6 +1,6 @@
 <script lang="ts">
     import {CreateCategorytDto} from "../../../models/category";
-    import type {PageData} from "./$types";
+    import type {PageData} from "../../../../.svelte-kit/types/src/routes";
     import CategoriesRepository from "../../../repository/categoriesRepository";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
@@ -37,8 +37,8 @@
     <title>Add Category</title>
 </svelte:head>
 
-<div class="container mt-4 w-50">
-    <div class="p-4 max-w-sm custom-card rounded-lg border border-gray-200 shadow-md w-full">
+<div class="container mt-4 center-kids">
+    <div class="custom-card rounded-lg border border-gray-200 shadow-md w-50 padding-form">
         <form on:submit|preventDefault={addCategory}>
             <div class="d-flex align-items-center mb-3">
                 <h3 class="text-xl font-medium">Add New Category</h3>

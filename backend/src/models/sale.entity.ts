@@ -23,4 +23,7 @@ export class Sale {
     })
     date_to: Date;
 
+    @Column()
+    isActive: boolean;
+
 }

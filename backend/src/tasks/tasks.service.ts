@@ -5,6 +5,7 @@ import { ContactService } from 'src/contact/contact.service';
 import { NewsletterService } from 'src/newsletter/newsletter.service';
 import { Newsletter } from 'src/models/newsletter.entity';
 import { ProductService } from 'src/product/product.service';
+import { SaleService } from "../sale/sale.service";
 
 @Injectable()
 export class TasksService {
@@ -13,7 +14,8 @@ export class TasksService {
     private readonly mailerService: MailerService,
     private readonly contactService: ContactService,
     private readonly newsletterService: NewsletterService,
-    private readonly productService: ProductService
+    private readonly productService: ProductService,
+    private readonly saleService: SaleService
   ) {}
 
   @Cron(CronExpression.EVERY_HOUR)
@@ -55,6 +57,16 @@ export class TasksService {
         text: await this.generateNewsletter(subscriber),
       });
     }
+  }
+
+  @Cron( "0 59 23 * * *") // 23:59 every day
+  async handleExpiredSales() {
+    this.logger.debug('Expiring sales');
+    const pastSales = await this.saleService.findAllDateToInThePastAndActive();
+    this.logger.debug(
+        'Number of sales: ' + pastSales.length.toString(),
+    );
+    await this.saleService.setStatusToInactive(pastSales);
   }
 
   private async generateNewsletter(subscriber: Newsletter) {

@@ -16,9 +16,14 @@ export class SaleController {
     return this.saleService.findAll();
   }
 
-  @Get(':productId')
-  findAllByProductId(@Param('productId') productId: string) {
-    return this.saleService.findAllByProductId(+productId);
+  @Get('active')
+  findAllActive() {
+    return this.saleService.findAllActive();
+  }
+
+  @Get('inactive')
+  findAllInactive() {
+    return this.saleService.findAllInactive();
   }
 
   @Delete(':id')

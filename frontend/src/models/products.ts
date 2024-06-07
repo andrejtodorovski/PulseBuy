@@ -35,6 +35,13 @@ export interface Product {
     name: string;
     description: string;
     price: number;
-    category: any;
+    category: Category;
     imageURL: string;
+    priceAfterDiscount: number;
+}
+
+export interface Category {
+    id: number;
+    name: string;
+    description: string;
 }

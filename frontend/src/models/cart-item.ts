@@ -1,3 +1,5 @@
+import type { Product } from "./products";
+
 export class CreateCartItemDto {
     cartId: number;
     productId: number;
@@ -25,13 +27,4 @@ export interface CartItem {
     product: Product;
     quantity: number;
 
-}
-
-export interface Product {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    imageURL: string;
-    createdAt: Date;
 }

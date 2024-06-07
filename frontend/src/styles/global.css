@@ -1,90 +1,93 @@
 :root {
-  --darkest-blue: #222831;
-  --dark-blue: #31363f;
-  --blue: #76abae;
-  --gray: #eee;
+    --darkest-blue: #222831;
+    --dark-blue: #31363f;
+    --blue: #76abae;
+    --gray: #eee;
 }
 
 body {
-  background-color: var(--gray);
-  margin: 0;
-  color: var(--darkest-blue);
-  font-family: Arial, sans-serif;
+    background-color: var(--gray);
+    margin: 0;
+    color: var(--darkest-blue);
+    font-family: Arial, sans-serif;
 }
 
 a {
-  text-decoration: none;
-  color: var(--gray);
+    text-decoration: none;
+    color: var(--gray);
 }
 
 .main-container {
-  min-height: 65vh;
+    min-height: 65vh;
 }
 
 .phone-card-link {
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
 }
 
 .phone-card {
-  border: 1px solid var(--dark-blue);
-  border-radius: 8px;
-  padding: 16px;
-  width: 300px;
-  margin: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: block;
-  background-color: var(--gray);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid var(--dark-blue);
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: block;
+    background-color: var(--gray);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .phone-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .phone-image {
-  width: 250px;
-  height: 250px;
-  border-radius: 5px;
-  object-fit: cover;
+    width: 250px;
+    height: 250px;
+    border-radius: 5px;
+    object-fit: cover;
 }
 
 .brand-name, .model-name {
-  color: var(--darkest-blue);
+    color: var(--darkest-blue);
 }
 
 .phone-info {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .brand-name {
-  font-weight: bolder;
-  height: 55px;
+    font-weight: bolder;
+    height: 55px;
 }
 
 .price-before-sale {
-  color: var(--dark-blue);
-  text-decoration: line-through;
+    color: var(--dark-blue);
+}
+
+.price-line-through {
+    text-decoration: line-through;
 }
 
 .new-price {
-  color: var(--blue);
-  font-size: 18px;
-  font-weight: bold;
+    color: var(--blue);
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .phone-actions {
-  display: flex;
-  justify-content: space-around;
+    display: flex;
+    justify-content: space-around;
 }
 
 .phone-actions a {
-  color: var(--darkest-blue);
+    color: var(--darkest-blue);
 }
 
 .custom-card {
-  background-color: var(--dark-blue);
+    background-color: var(--dark-blue);
 }
 
 label {
@@ -98,6 +101,18 @@ h3 {
 p {
     color: var(--gray);
 }
+
 .text-dark-blue {
     color: var(--dark-blue);
+}
+
+.center-kids {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.padding-form {
+  padding: 4rem;
 }

@@ -33,8 +33,8 @@
     <title>Add Product</title>
 </svelte:head>
 
-<div class="container mt-4 w-50">
-    <div class="p-4 max-w-sm custom-card rounded-lg border border-gray-200 shadow-md w-full">
+<div class="container center-kids mt-4">
+    <div class="custom-card rounded-lg border border-gray-200 shadow-md w-50 padding-form">
         <form on:submit|preventDefault={addProduct}>
             <div class="d-flex align-items-center mb-3">
                 <h3 class="text-xl font-medium">Add New Product</h3>

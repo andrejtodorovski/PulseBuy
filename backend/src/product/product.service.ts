@@ -74,14 +74,13 @@ export class ProductService {
 
   async mapProductToProductInfo(products: Product[]) {
     const productsInfo = products.map(async product => {
-      const sales = await this.saleService.findAllByProductId(product.id);
-      const currentSales = sales.filter(sale => sale.date_from <= new Date() && sale.date_to >= new Date());
+      const sale = await this.saleService.findActiveSaleForProduct(product.id);
       return new ProductInfoResponse(
         product.id,
         product.name,
         product.description,
         product.price,
-        this.getPriceWithDiscountApplied(product.price, currentSales),
+        this.getPriceWithDiscountApplied(product.price, sale),
         product.category.name,
         product.imageURL,
         product.createdAt
@@ -90,13 +89,11 @@ export class ProductService {
     return Promise.all(productsInfo);
   }
 
-  private getPriceWithDiscountApplied(price: number, sales: Sale[]): number {
+  private getPriceWithDiscountApplied(price: number, sale: Sale): number {
+    if (!sale) return price;
     let priceWithDiscountApplied = price;
-    sales.forEach(sale => {
-      priceWithDiscountApplied *= (1 - sale.percentage / 100);
-    });
+    priceWithDiscountApplied *= (1 - sale.percentage / 100);
     return priceWithDiscountApplied;
-
   }
 
   findAllProductsAddedInLast24Hours() {
