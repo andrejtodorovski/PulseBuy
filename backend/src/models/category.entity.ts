@@ -12,4 +12,7 @@ export class Category {
 
   @Column('text', { nullable: true })
   description: string;
+
+  @Column('text', { nullable: true })
+  imageUrl: string;
 }

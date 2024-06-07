@@ -16,6 +16,19 @@ export async function interceptedFetch(input: string, init: any) {
     return fetch(apiURL + input, init);
 }
 
+export const getUserId = () => {
+    if (typeof localStorage !== 'undefined' && localStorage !== null) {
+        return localStorage.getItem("userId");
+    } else {
+        return null;
+    }
+}
+
+export const setLoginInfo = (userId: string, isAdmin: string) => {
+    localStorage.setItem("userId", userId);
+    localStorage.setItem("isAdmin", isAdmin);
+}
+
 export const removeAuthToken = () => {
     sessionStorage.removeItem("AuthorizationToken");
     localStorage.removeItem("userId");
@@ -33,6 +46,17 @@ export const getAuthToken = () => {
 export const isUserLoggedIn = () => {
     return getAuthToken() !== null;
 };
+
+export const isUserAdmin = () => {
+    if (typeof localStorage !== 'undefined' && localStorage !== null) {
+        if (localStorage.getItem("isAdmin") === null) {
+            return false;
+        }
+        return localStorage.getItem("isAdmin") === "true";
+    } else {
+        return false;
+    }
+}
 
 export const isUserLogged = writable(getAuthToken());
 

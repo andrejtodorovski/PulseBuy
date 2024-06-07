@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { interceptedFetch, setAuthToken } from "../../helpers/helpers";
+  import { interceptedFetch, setAuthToken, setLoginInfo } from "../../helpers/helpers";
   import "../../styles/global.css";
   let username: string;
   let password: string;
@@ -21,8 +21,7 @@
         const data = await res.json();
         console.log(data);
         setAuthToken(data.token);
-        localStorage.setItem("userId", data.userId);
-
+        setLoginInfo(data.userId, data.isAdmin);
         window.location.href = "/";
       } else {
         const data = await res.json();

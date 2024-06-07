@@ -45,11 +45,34 @@ export class ProductService {
     return await this.productsRepository.save(product);
   }
 
+  async findAllByCategoryId(categoryId: number) {
+    const products = await this.productsRepository.find({
+      where: { category: { id: categoryId } },
+      relations: ["category"]
+    });
+
+    return this.mapProductToProductInfo(products);
+  }
+
   async findAll(): Promise<ProductInfoResponse[]> {
     const products = await this.productsRepository.find({
         relations: ["category"]
       }
     );
+    return this.mapProductToProductInfo(products);
+  }
+
+  async findFeatured(): Promise<ProductInfoResponse[]> {
+    const products = await this.productsRepository.find({
+      relations: ["category"],
+      order: {
+          createdAt: "DESC"
+      }
+    });
+    return this.mapProductToProductInfo(products.slice(0,4));
+  }
+
+  async mapProductToProductInfo(products: Product[]) {
     const productsInfo = products.map(async product => {
       const sales = await this.saleService.findAllByProductId(product.id);
       const currentSales = sales.filter(sale => sale.date_from <= new Date() && sale.date_to >= new Date());

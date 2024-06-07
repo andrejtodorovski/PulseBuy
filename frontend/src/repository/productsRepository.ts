@@ -3,8 +3,15 @@ import type {CreateProductDto} from "../models/products";
 import {UpdateProductDto} from "../models/products";
 
 class ProductsRepository {
-    fetchProducts = (): Promise<Response> => {
-        return interceptedFetch('/product/', {});
+    fetchProducts = (categoryId: string | null): Promise<Response> => {
+        if (categoryId === null || categoryId === "" || categoryId === undefined) {
+            return interceptedFetch("/product", {});
+        }
+        return interceptedFetch(`/product/by-category/${categoryId}`, {});
+    }
+
+    fetchFeaturedProducts = (): Promise<Response> => {
+        return interceptedFetch("/product/featured", {});
     }
 
     fetchProductById = (id: string): Promise<Response> => {

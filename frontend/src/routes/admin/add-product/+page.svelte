@@ -1,13 +1,12 @@
 <script lang="ts">
 
     import {CreateProductDto} from "../../../models/products";
-    import type {PageData} from "./$types"
     import ProductsRepository from "../../../repository/productsRepository";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import { isUserLogged } from '../../../helpers/helpers';
 
-    export let data: PageData
+    export let data: any
 
     let error;
     let createProductDto = new CreateProductDto();

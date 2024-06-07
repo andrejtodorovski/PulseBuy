@@ -20,6 +20,16 @@ export class ProductController {
     return this.productService.findAll();
   }
 
+  @Get("/featured")
+  findFeatured() {
+    return this.productService.findFeatured();
+  }
+
+  @Get("by-category/:categoryId")
+  findAllByCategoryId(@Param("categoryId") categoryId: string) {
+    return this.productService.findAllByCategoryId(+categoryId);
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.productService.findOne(+id);
