@@ -1,15 +1,12 @@
-export class User {
+export class UserResponse {
     username: string;
     email: string;
     fullName: string;
     address: string;
-    isAdmin: boolean;
-
-    constructor(username: string, email: string, fullName: string, address: string, isAdmin: boolean) {
+    constructor( username: string, email: string, fullName: string, address: string) {
         this.username = username;
         this.email = email;
         this.fullName = fullName;
         this.address = address;
-        this.isAdmin = isAdmin
     }
 }
