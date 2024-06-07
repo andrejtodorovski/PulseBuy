@@ -33,7 +33,7 @@
                     </div>
                 </a>
             {/each}
-            <a href={`/products/category/9999`} class="category-card-link">
+            <a href={`/products/category/`} class="category-card-link">
                 <div class="category-card text-center p-4 flex-fill mx-2">
                     <div class="category-info card-body">
                         <div class="card-icon text-warning">
@@ -57,7 +57,4 @@
 
 <style>
         @import 'style.css';
-        h3 {
-            color: var(--darkest-blue);
-        }
 </style>

@@ -1,12 +1,12 @@
 import ProductsRepository from "../repository/productsRepository";
 
-export async function load({ fetch, params }) {
-  const res = await ProductsRepository.fetchProducts();
+export async function load() {
+  const res = await ProductsRepository.fetchFeaturedProducts();
   const products = await res.json();
 
   if (res.ok) {
     return {
-      products: products.slice(0,4),
+      products: products,
     };
   }
 

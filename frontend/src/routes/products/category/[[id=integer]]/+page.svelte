@@ -1,27 +1,41 @@
 <script type="ts">
     import { onDestroy, onMount } from "svelte";
     import { io } from "$lib/webSocketConnection";
-    import { load } from "./+page";
     import { goto } from "$app/navigation";
     import { isUserAdmin, isUserLoggedIn } from "../../../../helpers/helpers";
     import Product from "$lib/product.svelte";
     import { toasts } from "svelte-toasts";
+    import { page } from "$app/stores";
+    import ProductsRepository from "../../../../repository/productsRepository";
 
-    /** @type {import('../../../../../.svelte-kit/types/src/routes').PageData} */
     export let data;
-    let page = 1;
+    let pageNumber = 1;
     let pageSize = 8;
+    let products = [];
     let filter = "";
     let sort = "najnovo"; // default
-    let productsLength = data.products.length;
+    let productsLength = products.length;
     let numberOfPages = Math.ceil(productsLength / pageSize);
-    let products = data.products.slice((page - 1) * pageSize, page * pageSize);
+    let productsToShow = products.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
     let loggedInAndAdmin = isUserLoggedIn() && isUserAdmin();
-    applyFiltersAndSorting();
+    const categoryId = $page.params.id;
+    loadProducts().then(() => {
+        applyFiltersAndSorting();
+    });
 
-    function applyFiltersAndSorting() {
-        let filteredProducts = data.products;
+    async function loadProducts() {
+        const res = await ProductsRepository.fetchProducts(categoryId)
+        const fetchedProducts = await res.json()
 
+        if (res.ok) {
+            products = fetchedProducts
+        } else {
+            products = []
+        }
+    }
+
+    async function applyFiltersAndSorting() {
+        let filteredProducts = products;
         if (filter) {
             filteredProducts = filteredProducts.filter(product =>
                 product.name.toLowerCase().includes(filter.toLowerCase())
@@ -48,23 +62,23 @@
 
         productsLength = filteredProducts.length;
         numberOfPages = Math.ceil(productsLength / pageSize);
-        products = filteredProducts.slice((page - 1) * pageSize, page * pageSize);
+        productsToShow = filteredProducts.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
     }
 
     function handlePagination(selectedPage) {
-        page = selectedPage;
+        pageNumber = selectedPage;
         applyFiltersAndSorting();
     }
 
     function handleFilterChange(event) {
         filter = event.target.value;
-        page = 1;
+        pageNumber = 1;
         applyFiltersAndSorting();
     }
 
     function handleSortChange(event) {
         sort = event.target.value;
-        page = 1;
+        pageNumber = 1;
         applyFiltersAndSorting();
     }
 
@@ -75,16 +89,14 @@
 
         io.emit("joinRoom", roomId);
 
-        io.on("Product.ProductCreatedEvent", (event) => {
-            load().then((newData) => {
-                data = newData;
+        io.on("Product.ProductCreatedEvent", () => {
+            loadProducts().then(() => {
                 applyFiltersAndSorting();
             });
         });
 
-        io.on("Product.ProductUpdatedEvent", (event) => {
-            load().then((newData) => {
-                data = newData;
+        io.on("Product.ProductUpdatedEvent", () => {
+            loadProducts().then(() => {
                 applyFiltersAndSorting();
             });
         });
@@ -118,7 +130,7 @@
 
     <div class="row">
         {#if productsLength > 0}
-            {#each products as product}
+            {#each productsToShow as product}
                 <Product product={product}/>
             {/each}
         {:else}
@@ -128,16 +140,16 @@
 
     <div class="pagination d-flex justify-content-center align-items-center">
         {#if numberOfPages > 1}
-            <button type="button" class="page-link {page === 1 ? 'disable' : ''}"
-                    on:click={() => handlePagination(page - 1)} disabled={page === 1}>Previous
+            <button type="button" class="page-link {pageNumber === 1 ? 'disable' : ''}"
+                    on:click={() => handlePagination(pageNumber - 1)} disabled={pageNumber === 1}>Previous
             </button>
             {#each Array(numberOfPages) as _, i}
-                <li class="page-item {page === (i + 1) ? 'active' : ''}">
+                <li class="page-item {pageNumber === (i + 1) ? 'active' : ''}">
                     <button type="button" class="page-link" on:click={() => handlePagination(i + 1)}>{i + 1}</button>
                 </li>
             {/each}
-            <button type="button" class="page-link {page === numberOfPages ? 'disable' : ''}"
-                    on:click={() => handlePagination(page + 1)} disabled={page === numberOfPages}>Next
+            <button type="button" class="page-link {pageNumber === numberOfPages ? 'disable' : ''}"
+                    on:click={() => handlePagination(pageNumber + 1)} disabled={pageNumber === numberOfPages}>Next
             </button>
         {/if}
     </div>

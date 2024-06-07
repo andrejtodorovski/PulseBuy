@@ -11,7 +11,6 @@
     import type { Cart } from "../../../models/cart";
     import { toasts } from "svelte-toasts";
     import { io } from "$lib/webSocketConnection";
-    import { load } from "../category/[id=integer]/+page";
     import ReviewRepository from "../../../repository/reviewRepository";
     import { CreateReviewDto, type Review } from "../../../models/review";
 
@@ -44,10 +43,8 @@
 
         await fetchReviews();
 
-        io.on("Product.ProductUpdatedEvent", (event) => {
-            load().then((newData) => {
-                fetchProduct()
-            })
+        io.on("Product.ProductUpdatedEvent", () => {
+            fetchProduct()
         })
 
         let userId: string = getUserId() || '';
