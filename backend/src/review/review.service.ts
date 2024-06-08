@@ -64,4 +64,12 @@ export class ReviewService {
       throw new NotFoundException(`Review #${id} not found`);
     }
   }
+  async getAverageRating(productId: number): Promise<number> {
+    const reviews = await this.reviewRepository.find({where: {product: {id: productId}}});
+    if (reviews.length === 0) {
+      return 0;
+    }
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return sum / reviews.length;
+  }
 }

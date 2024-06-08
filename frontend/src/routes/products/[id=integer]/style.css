@@ -21,6 +21,11 @@
     max-width: 400px;
     margin-right: 20px;
 }
+.rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
 .product-image img {
     max-width: 100%;
@@ -62,4 +67,31 @@ h1 {
     margin-bottom: 20px;
     color: #495057;
     line-height: 1.4;
+}
+.star {
+    font-size: 24px;
+    color: gray;
+    cursor: pointer;
+}
+
+.star.filled {
+    color: gold;
+}
+
+.star.low {
+    color: gold;
+}
+
+.star.medium {
+    color: gold;
+}
+
+.star.high {
+    color: gold;
+}
+
+.average {
+    margin-left: 10px;
+    font-size: 20px;
+    color: #000;
 }

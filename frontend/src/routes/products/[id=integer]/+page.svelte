@@ -15,6 +15,7 @@
     import { CreateReviewDto, type Review } from "../../../models/review";
 
     let cart: Cart;
+    let average: number;
     let product: Product | undefined;
     let reviews: Review[];
     let createCartItemDto = new CreateCartItemDto();
@@ -42,6 +43,9 @@
         await fetchProduct()
 
         await fetchReviews();
+    
+        await getAverage();
+
 
         io.on("Product.ProductUpdatedEvent", () => {
             fetchProduct()
@@ -59,6 +63,13 @@
             });
         });
     }
+    const getAverage = async () => {
+   ReviewRepository.getAverageRating(productId).then((data) => {
+            data.json().then((averageData) => {
+                average = averageData;
+            });
+        });
+    }
 
     const addReview = async () => {
         createReviewDto.productId = Number(productId);
@@ -68,6 +79,7 @@
             if (res.ok) {
                 toasts.success('Review added successfully');
                 await fetchReviews();
+                await getAverage();
             } else {
                 const errorMessage = await res.json();
                 toasts.error(errorMessage.message);
@@ -102,7 +114,14 @@
     const goBack = () => {
         goto('/products');
     };
-
+    const getStarClass = (starValue) => {
+        if (average >= starValue) {
+            return average < 2 ? 'star filled low' :
+                   average < 4 ? 'star filled medium' :
+                   'star filled high';
+        }
+        return 'star';
+    }
 </script>
 {#if product}
     <div class="product-details">
@@ -114,6 +133,14 @@
             <p class="category">Category: {product?.category.name}</p>
             <p class="description">{product?.description}</p>
             <p class="price">Price: ${product?.price}</p>
+            {#if average > 0}
+            <div class="rating">
+                {#each [1, 2, 3, 4, 5] as starValue}
+                    <span class={getStarClass(starValue)}>&#9733;</span>
+                {/each}
+                <span class="average">{average.toFixed(1)}</span>
+            </div>
+            {/if}
             {#if loggedInAndAdmin}
                 <a href={`/products/${product?.id}/edit`} class="phone-card-link col-md-3">
                     Edit

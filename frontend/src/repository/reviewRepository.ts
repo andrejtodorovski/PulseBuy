@@ -15,6 +15,9 @@ class ReviewRepository {
             },
         });
     }
+    getAverageRating = (productId: string): Promise<Response> => {
+        return interceptedFetch(`/review/average/${productId}`, {});
+    }
 }
 
 export default new ReviewRepository();

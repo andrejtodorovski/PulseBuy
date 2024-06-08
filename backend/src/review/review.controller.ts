@@ -33,4 +33,9 @@ export class ReviewController {
   remove(@Param('id') id: string) {
     return this.reviewService.remove(+id);
   }
+
+  @Get('/average/:productId')
+  getAverageRating(@Param('productId') productId: string) {
+    return this.reviewService.getAverageRating(+productId);
+  }
 }
