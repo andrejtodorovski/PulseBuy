@@ -10,13 +10,9 @@ export abstract class EventNotificationService {
   protected constructor(readonly htmlTemplateService: HtmlTemplateService, readonly usersService: UsersService) {
   }
 
-  applicableTo(event: PulseBuyEvent, channel: HtmlTemplateContext): Promise<boolean> {
-    return this.htmlTemplateService.existsByEventClassNameAndContext(event.constructor.name, channel);
-  }
+  abstract applicableTo(event: PulseBuyEvent, channel: HtmlTemplateContext): Promise<boolean>;
 
-  async notificationRecipients(event: PulseBuyEvent): Promise<User[]> {
-    return await this.usersService.findAll();
-  }
+  abstract notificationRecipients(event: PulseBuyEvent): Promise<User[]>;
 
   async buildNotification(event: PulseBuyEvent, channel: HtmlTemplateContext, user: User): Promise<EventNotification> {
     const template = await this.htmlTemplateService.findByEventClassNameAndContext(event.constructor.name, channel);

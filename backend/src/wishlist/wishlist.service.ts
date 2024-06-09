@@ -5,6 +5,7 @@ import { Wishlist } from "../models/wishlist.entity";
 import { Repository } from "typeorm";
 import { ProductService } from "../product/product.service";
 import { UsersService } from "../users/users.service";
+import { User } from "../models/user.entity";
 
 @Injectable()
 export class WishlistService {
@@ -43,6 +44,15 @@ export class WishlistService {
                 product: wishlistItem.product,
             }
         });
+    }
+
+
+    async findAllUsersWithTheProductInTheirWishlist(productId: number): Promise<User[]> {
+        const productInWislists = await this.wishlistRepository.find({
+            relations: ['user'],
+            where: {product: {id: productId}},
+        })
+        return productInWislists.map(wishlistItem => wishlistItem.user);
     }
 
     remove(id: number) {
