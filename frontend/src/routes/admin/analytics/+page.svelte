@@ -1,5 +1,21 @@
 <script lang="ts">
-    import { isUserAdmin } from "../../../helpers/helpers";
+    import { interceptedFetch, isUserAdmin } from "../../../helpers/helpers";
+    import { onMount } from "svelte";
+
+    interface Analytics {
+        products_added_in_the_last_month: number;
+        orders_in_the_last_month: number;
+        products_that_need_restocking: number;
+        products_in_users_wishlists: number;
+    }
+
+    let analytics = {} as Analytics;
+    async function fetchSystemAnalytics() {
+        const response = await interceptedFetch('/system-analytics', {});
+        analytics = await response.json();
+    }
+
+    onMount(fetchSystemAnalytics)
 </script>
 <div class="container mt-5">
     {#if isUserAdmin()}
@@ -8,7 +24,7 @@
             <div class="card text-center p-4 flex-fill mx-2">
                 <div class="card-body">
                     <div class="card-icon text-primary">
-                        15
+                        {analytics.products_added_in_the_last_month}
                     </div>
                     <h5 class="text-dark-blue">New products in the last month</h5>
                 </div>
@@ -16,7 +32,7 @@
             <div class="card text-center p-4 flex-fill mx-2">
                 <div class="card-body">
                     <div class="card-icon text-success">
-                        200
+                        {analytics.orders_in_the_last_month}
                     </div>
                     <h5 class="text-dark-blue">Successful orders in the last month</h5>
                 </div>
@@ -24,7 +40,7 @@
             <div class="card text-center p-4 flex-fill mx-2">
                 <div class="card-body">
                     <div class="card-icon text-danger">
-                        10
+                        {analytics.products_that_need_restocking}
                     </div>
                     <h5 class="text-dark-blue">Products that need restocking</h5>
                 </div>
@@ -32,7 +48,7 @@
             <div class="card text-center p-4 flex-fill mx-2">
                 <div class="card-body">
                     <div class="card-icon text-warning">
-                        450
+                        {analytics.products_in_users_wishlists}
                     </div>
                     <h5 class="text-dark-blue">Items in user's wishlist</h5>
                 </div>

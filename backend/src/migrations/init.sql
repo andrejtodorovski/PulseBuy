@@ -132,3 +132,17 @@ VALUES ('ProductCreatedEvent', 'New product added', 'New product: {{event.name}}
        ('ProductCreatedEvent', 'New product added', 'New product: {{event.name}}', 'Email Notification'),
        ('ProductUpdatedEvent', 'Updated product', 'Product: {{event.name}} has been updated', 'In App Notification'),
        ('ProductUpdatedEvent', 'Updated product', 'Product: {{event.name}} has been updated', 'Email Notification')
+
+
+
+drop view if exists v_system_analytics;
+create or replace view v_system_analytics as
+(
+select
+    (select count(*) from products where "createdAt"::date >= current_date - interval '1' month) as products_added_in_the_last_month,
+    (select count(*) from carts where status = 'Delivered' and "dateOrdered"::date >= current_date - interval '1' month) as orders_in_the_last_month,
+    (select count(*) from products where "numberInStock" = 0) as products_that_need_restocking,
+    (select count(*) from wishlist) as products_in_users_wishlists
+        );
+
+select * from v_system_analytics

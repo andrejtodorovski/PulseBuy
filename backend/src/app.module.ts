@@ -29,6 +29,8 @@ import {NotificationsModule} from './notifications/notifications.module';
 import {HtmlTemplateModule} from './html-template/html-template.module';
 import * as process from "process";
 import { CookieController } from './cookie/cookie.controller';
+import { SystemAnalyticsModule } from './system-analytics/system-analytics.module';
+import { SystemAnalyticsView } from "./system-analytics/system-analytics-view";
 
 @Module({
     imports: [
@@ -57,7 +59,7 @@ import { CookieController } from './cookie/cookie.controller';
                     username: process.env.DATABASE_USER,
                     password: process.env.DATABASE_PASSWORD,
                     database: process.env.DATABASE_NAME,
-                    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+                    entities: [SystemAnalyticsView, __dirname + '/**/*.entity{.ts,.js}'],
                     synchronize: true,
                 };
             },
@@ -114,6 +116,7 @@ import { CookieController } from './cookie/cookie.controller';
         WishlistModule,
         HtmlTemplateModule,
         NotificationsModule,
+        SystemAnalyticsModule,
     ],
     controllers: [AppController, CookieController],
     providers: [AppService, SaleEventsService],

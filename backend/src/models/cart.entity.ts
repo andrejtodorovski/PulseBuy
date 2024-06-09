@@ -20,4 +20,10 @@ export class Cart {
   })
   status: CartStatus;
 
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  dateOrdered: Date;
+
 }

@@ -92,6 +92,9 @@ export class CartService {
     for (const cartItem of cartItems) {
       await this.productRepository.update(cartItem.product.id, {numberInStock: cartItem.product.numberInStock - cartItem.quantity});
     }
-    return await this.cartRepository.update(id, {status: CartStatus.DELIVERED});
+    return await this.cartRepository.update(id, {
+      status: CartStatus.DELIVERED,
+      dateOrdered: new Date()
+    });
   }
 }
