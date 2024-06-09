@@ -9,4 +9,6 @@ export class CreateProductDto {
   categoryId: number;
 
   imageURL: string;
+
+  numberInStock: number;
 }

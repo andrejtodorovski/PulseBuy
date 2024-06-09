@@ -44,7 +44,7 @@
         }
     }
 
-    async function updateQuantity(itemId: number, quantity: number) {
+    async function updateQuantity(itemId: number, quantity: number, numberInStock: number) {
         try {
             if (quantity.toString() == '') {
                 return;
@@ -59,6 +59,10 @@
             }
             if (quantity == 0) {
                 await removeItemFromCart(itemId);
+                return;
+            }
+            if (quantity > numberInStock) {
+                toasts.error('Not enough in stock. Please select a lower quantity');
                 return;
             }
             const response = await CartItemRepository.updateCartItem(itemId.toString(), { quantity });
@@ -128,7 +132,7 @@
                     <td><img src={item.product.imageURL} alt={item.product.name}> {item.product.name}</td>
                     <td>{item.product.description}</td>
                     <td>
-                        <input class="form-control w-25" type="number" min="1" value={item.quantity} on:input={(event) => updateQuantity(item.id, event.target.value)} />
+                        <input class="form-control" type="number" min="1" max="{item.product.numberInStock}" value={item.quantity} on:input={(event) => updateQuantity(item.id, event.target.value, item.product.numberInStock)} />
                     </td>
                     <td>${item.product.price}</td>
                     <td>${(item.quantity * item.product.price)}</td>

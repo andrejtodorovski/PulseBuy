@@ -34,4 +34,9 @@ export class Product {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @Column({
+    default: 0
+  })
+  numberInStock: number;
 }

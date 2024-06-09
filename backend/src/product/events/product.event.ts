@@ -25,3 +25,11 @@ export class ProductUpdatedEvent extends ProductEvent {
     super(id);
   }
 }
+
+export class ProductBackInStockEvent extends ProductEvent {
+  name: string;
+  constructor(id: number, name: string) {
+    super(id);
+    this.name = name;
+  }
+}

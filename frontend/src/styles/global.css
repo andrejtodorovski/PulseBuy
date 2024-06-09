@@ -116,3 +116,15 @@ p {
 .padding-form {
   padding: 4rem;
 }
+
+.out-of-stock{
+    color: red;
+}
+
+.in-stock{
+    color: green;
+}
+
+.bold {
+    font-weight: bold;
+}

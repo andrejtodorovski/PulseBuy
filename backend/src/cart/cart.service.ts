@@ -6,6 +6,8 @@ import { User } from "src/models/user.entity";
 import { Transactional } from "typeorm-transactional";
 import { CreateCartDto } from "./dto/create-cart.dto";
 import { CartStatus } from "src/models/cart-status.enum";
+import { CartItem } from "../models/cart-item.entity";
+import { Product } from "../models/product.entity";
 
 @Injectable()
 export class CartService {
@@ -14,7 +16,11 @@ export class CartService {
     @InjectRepository(Cart)
     private cartRepository: Repository<Cart>,
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    @InjectRepository(CartItem)
+    private cartItemRepository: Repository<CartItem>,
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
   ) {
   }
 
@@ -79,6 +85,13 @@ export class CartService {
   }
 
   async changeStatus(id: number) {
-    return await this.cartRepository.update(id, { status: CartStatus.DELIVERED });
+    const cartItems = await this.cartItemRepository.find({
+      relations: ['product'],
+      where: {cart: {id}}
+    });
+    for (const cartItem of cartItems) {
+      await this.productRepository.update(cartItem.product.id, {numberInStock: cartItem.product.numberInStock - cartItem.quantity});
+    }
+    return await this.cartRepository.update(id, {status: CartStatus.DELIVERED});
   }
 }

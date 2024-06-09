@@ -5,7 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
 import { Category } from "src/models/category.entity";
 import { Transactional } from "typeorm-transactional";
-import { ProductCreatedEvent, ProductUpdatedEvent } from "./events/product.event";
+import { ProductBackInStockEvent, ProductCreatedEvent, ProductUpdatedEvent } from "./events/product.event";
 import { ProductEventsService } from "./product-events.service";
 import { Product } from "../models/product.entity";
 import { ProductInfoResponse } from "./dto/product-info.response";
@@ -62,6 +62,16 @@ export class ProductService {
     return this.mapProductToProductInfo(products);
   }
 
+  async findAllSortedForRestocking(): Promise<ProductInfoResponse[]> {
+    const products = await this.productsRepository.find({
+      relations: ["category"],
+      order: {
+        numberInStock: "ASC"
+      }
+    });
+    return this.mapProductToProductInfo(products);
+
+  }
   async findFeatured(): Promise<ProductInfoResponse[]> {
     const products = await this.productsRepository.find({
       relations: ["category"],
@@ -83,7 +93,8 @@ export class ProductService {
         this.getPriceWithDiscountApplied(product.price, sale),
         product.category.name,
         product.imageURL,
-        product.createdAt
+        product.createdAt,
+        product.numberInStock
       );
     });
     return Promise.all(productsInfo);
@@ -138,6 +149,19 @@ export class ProductService {
     this.productEventsService.emitEvent(productUpdatedEvent);
 
     return await this.productsRepository.save(updatedProduct);
+  }
+
+  async updateStock(id: number, addAmount: number) {
+    const product = await this.productsRepository.findOne(
+        {where: {id}}
+    );
+    const productBackInStockEvent = new ProductBackInStockEvent(id, product.name)
+    if (product.numberInStock === 0 && addAmount > 0) {
+      this.productEventsService.emitEvent(productBackInStockEvent);
+    }
+    return this.productsRepository.update(id, {
+      numberInStock: product.numberInStock + addAmount
+    });
   }
 
   remove(id: number) {

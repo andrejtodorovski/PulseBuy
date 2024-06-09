@@ -4,6 +4,7 @@ export class CreateProductDto {
     price: number;
     categoryId: number;
     imageURL: string;
+    numberInStock: number;
 
     constructor() {
         this.name = "";
@@ -11,6 +12,7 @@ export class CreateProductDto {
         this.price = 0;
         this.categoryId = 0;
         this.imageURL = "";
+        this.numberInStock = 0;
     }
 }
 
@@ -20,6 +22,7 @@ export class UpdateProductDto {
     price: number;
     categoryId: number;
     imageURL: string;
+    numberInStock: number;
 
     constructor(product: Product) {
         this.name = product.name;
@@ -27,6 +30,7 @@ export class UpdateProductDto {
         this.price = product.price;
         this.categoryId = product.category.id;
         this.imageURL = product.imageURL;
+        this.numberInStock = product.numberInStock;
     }
 }
 
@@ -38,6 +42,7 @@ export interface Product {
     category: Category;
     imageURL: string;
     priceAfterDiscount: number;
+    numberInStock: number;
 }
 
 export interface Category {

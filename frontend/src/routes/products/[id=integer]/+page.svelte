@@ -43,7 +43,7 @@
         await fetchProduct()
 
         await fetchReviews();
-    
+
         await getAverage();
 
 
@@ -64,7 +64,7 @@
         });
     }
     const getAverage = async () => {
-   ReviewRepository.getAverageRating(productId).then((data) => {
+        ReviewRepository.getAverageRating(productId).then((data) => {
             data.json().then((averageData) => {
                 average = averageData;
             });
@@ -91,7 +91,10 @@
     const addToCart = async () => {
         createCartItemDto.productId = Number(productId);
         createCartItemDto.cartId = cart.id;
-
+        if (createCartItemDto.quantity > product.numberInStock) {
+            toasts.error(`Not enough stock available. There are only ${product.numberInStock} items available.`);
+            return;
+        }
 
         try {
             const res = await CartItemRepository.createCartItem(createCartItemDto);
@@ -117,8 +120,8 @@
     const getStarClass = (starValue) => {
         if (average >= starValue) {
             return average < 2 ? 'star filled low' :
-                   average < 4 ? 'star filled medium' :
-                   'star filled high';
+                average < 4 ? 'star filled medium' :
+                    'star filled high';
         }
         return 'star';
     }
@@ -134,12 +137,12 @@
             <p class="description">{product?.description}</p>
             <p class="price">Price: ${product?.price}</p>
             {#if average > 0}
-            <div class="rating">
-                {#each [1, 2, 3, 4, 5] as starValue}
-                    <span class={getStarClass(starValue)}>&#9733;</span>
-                {/each}
-                <span class="average">{average.toFixed(1)}</span>
-            </div>
+                <div class="rating">
+                    {#each [1, 2, 3, 4, 5] as starValue}
+                        <span class={getStarClass(starValue)}>&#9733;</span>
+                    {/each}
+                    <span class="average">{average.toFixed(1)}</span>
+                </div>
             {/if}
             {#if loggedInAndAdmin}
                 <a href={`/products/${product?.id}/edit`} class="phone-card-link col-md-3">
@@ -147,14 +150,19 @@
                 </a>
             {/if}
         </div>
-        <div class="add-to-cart">
-            <h3 class="text-xl font-medium">{product.name}</h3>
-            <p>Price: ${product.price}</p>
-            <label for="quantity">Quantity:</label>
-            <input type="number" min="1" class="form-control" id="quantity" bind:value={createCartItemDto.quantity}/>
+        {#if product.numberInStock !== 0}
+            <div class="add-to-cart">
+                <h3 class="text-xl font-medium">{product.name}</h3>
+                <p>Price: ${product.price}</p>
+                <label for="quantity">Quantity:</label>
+                <input type="number" min="1" max="{product.numberInStock}" class="form-control" id="quantity"
+                       bind:value={createCartItemDto.quantity}/>
 
-            <button class="btn btn-primary mt-2" on:click|preventDefault={addToCart}>Add to Cart</button>
-        </div>
+                <button class="btn btn-primary mt-2" on:click|preventDefault={addToCart}>Add to Cart</button>
+            </div>
+        {:else}
+            <p class="out-of-stock">Out of stock</p>
+        {/if}
     </div>
     <div class="product-reviews">
         <h2>Reviews</h2>

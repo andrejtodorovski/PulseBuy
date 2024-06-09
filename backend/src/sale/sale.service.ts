@@ -62,11 +62,9 @@ export class SaleService {
                 isActive: true
             }
         );
-        const saleCreatedEvent = new SaleCreatedEvent(createSaleDto.productId);
+        const saleCreatedEvent = new SaleCreatedEvent(createSaleDto.productId, product.name, createSaleDto.percentage, createSaleDto.date_to);
         this.logger.log(`Sale created for product with id ${createSaleDto.productId}. Please notify all the users that have this product as their favorite about the sale.`);
         this.saleEventService.emitEvent(saleCreatedEvent);
-        // TODO() - darko - notify all the users that have this product in their wishlist about the sale
-        // implement it only using the sockets or create a notifications service, we need to talk about what approach to take
         return this.saleRepository.save(sale);
     }
 

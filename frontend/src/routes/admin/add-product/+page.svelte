@@ -8,10 +8,8 @@
 
     export let data: any
 
-    let error;
     let createProductDto = new CreateProductDto();
 
-    let message: string | undefined;
     onMount(async () => {
         $isUserLogged || goto('/login');
     });
@@ -67,6 +65,12 @@
                         <option value={category.id}>{category.name}</option>
                     {/each}
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productNumberInStock">Number in stock:</label>
+                <input type="number" step="1" class="form-control" id="productNumberInStock"
+                       bind:value={createProductDto.numberInStock}/>
             </div>
 
             <button type="submit" class="btn btn-primary mt-2">Add Product</button>

@@ -20,6 +20,11 @@ export class ProductController {
     return this.productService.findAll();
   }
 
+  @Get("sorted-for-restocking")
+  findForRestocking() {
+      return this.productService.findAllSortedForRestocking();
+  }
+
   @Get("/featured")
   findFeatured() {
     return this.productService.findFeatured();
@@ -39,6 +44,12 @@ export class ProductController {
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(":id/stock")
+  updateStock(@Param("id") id: string, @Body("numberInStock") numberInStock: number) {
+    return this.productService.updateStock(+id, numberInStock);
   }
 
   @UseGuards(JwtAuthGuard)
