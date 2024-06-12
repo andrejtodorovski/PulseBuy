@@ -1,6 +1,7 @@
 <script lang="ts">
     import { interceptedFetch, isUserAdmin } from "../../../helpers/helpers";
     import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
 
     interface Analytics {
         products_added_in_the_last_month: number;
@@ -10,12 +11,19 @@
     }
 
     let analytics = {} as Analytics;
+
     async function fetchSystemAnalytics() {
         const response = await interceptedFetch('/system-analytics', {});
         analytics = await response.json();
     }
 
-    onMount(fetchSystemAnalytics)
+    onMount(async () => {
+        if (!isUserAdmin()) {
+            await goto("/unauthorized")
+        } else {
+            await fetchSystemAnalytics();
+        }
+    });
 </script>
 <div class="container mt-5">
     {#if isUserAdmin()}

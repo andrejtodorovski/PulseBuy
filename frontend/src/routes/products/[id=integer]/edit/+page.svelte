@@ -7,6 +7,7 @@
     import {onMount} from "svelte";
     import {page} from "$app/stores";
     import type {PageData} from "../../../$types";
+    import { isUserAdmin } from "../../../../helpers/helpers";
 
     export let data: PageData;
 
@@ -21,14 +22,18 @@
     let message: string | undefined;
 
     onMount(async () => {
-        productId = $page.params.id;
+        if (!isUserAdmin()) {
+            await goto("/unauthorized")
+        } else {
+            productId = $page.params.id;
 
-        ProductsRepository.fetchProductById(productId).then((data) => {
-            data.json().then((productData) => {
-                product = productData;
-                updateProductDto = new UpdateProductDto(productData)
+            ProductsRepository.fetchProductById(productId).then((data) => {
+                data.json().then((productData) => {
+                    product = productData;
+                    updateProductDto = new UpdateProductDto(productData)
+                });
             });
-        });
+        }
     });
 
     const updateProduct = async () => {

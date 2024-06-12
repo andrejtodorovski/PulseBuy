@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { interceptedFetch } from "../../../helpers/helpers";
+    import { interceptedFetch, isUserAdmin } from "../../../helpers/helpers";
     import { toasts } from "svelte-toasts";
     import { derived, writable } from "svelte/store";
     import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
 
     interface CreateSaleDto {
         date_from: string;
@@ -57,7 +58,13 @@
         }
     }
 
-    onMount(fetchProducts);
+    onMount(async () => {
+        if (!isUserAdmin()) {
+            await goto("/unauthorized")
+        } else {
+            await fetchProducts();
+        }
+    });
 </script>
 
 <div class="container center-kids">

@@ -5,45 +5,53 @@ import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 
 @Controller('cart')
 export class CartController {
-  constructor(private readonly cartService: CartService) {}
+    constructor(private readonly cartService: CartService) {
+    }
 
-  @Post()
-  create(@Body() CreateCartDto: CreateCartDto) {
-    return this.cartService.create(CreateCartDto);
-  }
+    @Post()
+    create(@Body() CreateCartDto: CreateCartDto) {
+        return this.cartService.create(CreateCartDto);
+    }
 
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.cartService.findAll();
-  }
+    @Get()
+    @UseGuards(JwtAuthGuard)
+    findAll() {
+        return this.cartService.findAll();
+    }
 
-  @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.cartService.findOne(+id);
-  }
+    @Get('admin-orders')
+    @UseGuards(JwtAuthGuard)
+    findAllOrdered() {
+        return this.cartService.findAllOrdered();
+    }
 
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: string) {
-    return this.cartService.remove(+id);
-  }
+    @Get(':id')
+    @UseGuards(JwtAuthGuard)
+    findOne(@Param('id') id: string) {
+        return this.cartService.findOne(+id);
+    }
 
-  @Get('user/:id')
-  @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    remove(@Param('id') id: string) {
+        return this.cartService.remove(+id);
+    }
+
+    @Get('user/:id')
+    @UseGuards(JwtAuthGuard)
     findByUser(@Param('id') id: string) {
         return this.cartService.findByUser(+id);
     }
 
-  @Patch('change-status/:id')
-  @UseGuards(JwtAuthGuard)
-  changeStatus(@Param('id') id: string) {
-    return this.cartService.changeStatus(+id);
-  }
-  @Get('user/ordered/:id')
-  @UseGuards(JwtAuthGuard)
-  findByUserOrders(@Param('id') id: string) {
-      return this.cartService.findByUserOrders(+id);
-  }
+    @Patch('change-status/:id')
+    @UseGuards(JwtAuthGuard)
+    changeStatus(@Param('id') id: string) {
+        return this.cartService.changeStatus(+id);
+    }
+
+    @Get('user/ordered/:id')
+    @UseGuards(JwtAuthGuard)
+    findByUserOrders(@Param('id') id: string) {
+        return this.cartService.findByUserOrders(+id);
+    }
 }

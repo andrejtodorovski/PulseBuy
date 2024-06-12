@@ -1,33 +1,29 @@
 <script lang="ts">
-    import {CreateCategorytDto} from "../../../models/category";
-    import type {PageData} from "../../../../.svelte-kit/types/src/routes";
+    import { CreateCategorytDto } from "../../../models/category";
     import CategoriesRepository from "../../../repository/categoriesRepository";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
-    import { isUserLogged, isUserLoggedIn } from '../../../helpers/helpers';
+    import { isUserAdmin } from '../../../helpers/helpers';
 
-    export let data: PageData;
-
-    let error : any;
     let createCategoryDto = new CreateCategorytDto();
 
     let message: string | undefined;
     onMount(async () => {
-        isUserLoggedIn() || goto('/login');
-
-        });
+        if (!isUserAdmin()) {
+            await goto("/unauthorized")
+        }
+    });
     const addCategory = async () => {
         try {
             const res = await CategoriesRepository.addNewCategory(createCategoryDto);
 
             if (res.ok) {
                 message = "Category was added successfully!";
-                goto('/category');
+                await goto('/category');
             } else {
                 message = "Failed to add category.";
             }
         } catch (err) {
-            error = "RES001: An error occurred.";
             console.log(err);
         }
     };
@@ -50,16 +46,14 @@
 
             <div class="form-group">
                 <label for="categoryDescription">Category Description:</label>
-                <textarea class="form-control" id="categoryDescription" rows="10" bind:value={createCategoryDto.description}></textarea>
+                <textarea class="form-control" id="categoryDescription" rows="10"
+                          bind:value={createCategoryDto.description}></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary mt-2">Add Category</button>
         </form>
         {#if message}
             <p>{message}</p>
-        {/if}
-        {#if error}
-            <p class="text-danger">{error}</p>
         {/if}
     </div>
 </div>

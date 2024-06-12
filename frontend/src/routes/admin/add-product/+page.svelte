@@ -4,25 +4,25 @@
     import ProductsRepository from "../../../repository/productsRepository";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
-    import { isUserLogged } from '../../../helpers/helpers';
+    import { isUserAdmin, isUserLogged } from '../../../helpers/helpers';
 
     export let data: any
 
     let createProductDto = new CreateProductDto();
 
     onMount(async () => {
-        $isUserLogged || goto('/login');
+        if (!isUserAdmin()) {
+            await goto("/unauthorized")
+        }
     });
     const addProduct = async () => {
         try {
             const res = await ProductsRepository.addNewProduct(createProductDto);
 
             if (res.ok) {
-                message = "Product was added successfully!";
                 goto('/products');
             }
         } catch (err) {
-            error = "RES001: An error occurred.";
         }
     };
 </script>

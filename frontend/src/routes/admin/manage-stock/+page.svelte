@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { interceptedFetch } from "../../../helpers/helpers";
+    import { createEventDispatcher, onMount } from "svelte";
+    import { interceptedFetch, isUserAdmin } from "../../../helpers/helpers";
     import type { Product } from "../../../models/products";
-    import { createEventDispatcher } from "svelte";
+    import { goto } from "$app/navigation";
 
     let products = [] as Product[];
     let showModal = false;
@@ -26,7 +26,7 @@
         if (selectedProduct) {
             await interceptedFetch(`/product/${selectedProduct.id}/stock`, {
                 method: "PATCH",
-                body: JSON.stringify({ numberInStock: amount }),
+                body: JSON.stringify({numberInStock: amount}),
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -42,7 +42,13 @@
         products = await response.json();
     }
 
-    onMount(fetchProductsForRestocking);
+    onMount(async () => {
+        if (!isUserAdmin()) {
+            await goto("/unauthorized")
+        } else {
+            await fetchProductsForRestocking();
+        }
+    });
 </script>
 
 <style>
@@ -50,13 +56,16 @@
         width: 100%;
         border-collapse: collapse;
     }
+
     table, th, td {
         border: 1px solid black;
     }
+
     th, td {
         padding: 10px;
         text-align: left;
     }
+
     .modal {
         display: block;
         position: fixed;
@@ -66,9 +75,10 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgb(0,0,0);
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
     }
+
     .modal-content {
         background-color: #fefefe;
         margin: 15% auto;
@@ -115,7 +125,8 @@
             <h5>Add Stock for {selectedProduct ? selectedProduct.name : ''}</h5>
             <form on:submit|preventDefault={addStock}>
                 <label for="amount" class="text-dark-blue">Amount:</label>
-                <input class="form-control" type="number" id="amount" name="amount" min="1" bind:value={amount} required>
+                <input class="form-control" type="number" id="amount" name="amount" min="1" bind:value={amount}
+                       required>
                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
                 <button class="btn btn-primary mt-3" on:click={closeModal}>Discard</button>
             </form>

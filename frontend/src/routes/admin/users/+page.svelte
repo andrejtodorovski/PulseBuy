@@ -1,9 +1,10 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import { getUserId, interceptedFetch } from "../../../helpers/helpers";
+    import { getUserId, interceptedFetch, isUserAdmin } from "../../../helpers/helpers";
     import type { User } from "../../../models/user";
     import { toasts } from "svelte-toasts";
+    import { goto } from "$app/navigation";
 
     const users = writable<User[]>([]);
 
@@ -32,7 +33,13 @@
         await fetchUsers();
     }
 
-    onMount(fetchUsers);
+    onMount(async () => {
+        if (!isUserAdmin()) {
+            await goto("/unauthorized")
+        } else {
+            await fetchUsers();
+        }
+    });
 </script>
 
 <style>

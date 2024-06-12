@@ -1,8 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import { interceptedFetch } from '../../../helpers/helpers';
+    import { interceptedFetch, isUserAdmin } from '../../../helpers/helpers';
     import type { Product } from "../../../models/products";
+    import { goto } from "$app/navigation";
 
     interface Sale {
         id: number;
@@ -30,13 +31,14 @@
         inactiveSales.set(data);
     }
 
-
-    onMount(
-        async () => {
+    onMount(async () => {
+        if (!isUserAdmin()) {
+            await goto("/unauthorized")
+        } else {
             await fetchActiveSales();
             await fetchInactiveSales();
         }
-    );
+    });
 </script>
 
 <style>

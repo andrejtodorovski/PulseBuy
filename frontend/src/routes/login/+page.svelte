@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { interceptedFetch, setAuthToken, setLoginInfo } from "../../helpers/helpers";
+  import { interceptedFetch, isUserCustomer, isUserLoggedIn, setAuthToken, setLoginInfo } from "../../helpers/helpers";
   import "../../styles/global.css";
+  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
   let username: string;
   let password: string;
   let error: string | undefined;
@@ -32,6 +34,11 @@
       error = "Something went wrong. Please try again later.";
     }
   };
+  onMount(async () => {
+    if (isUserLoggedIn()) {
+      await goto("/")
+    }
+  });
 </script>
 
 <div class="container mt-4 w-50">

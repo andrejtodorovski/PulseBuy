@@ -1,4 +1,4 @@
-import {interceptedFetch} from "../helpers/helpers";
+import { interceptedFetch } from "../helpers/helpers";
 import type { CreateCartDto } from "../models/cart";
 
 class CartRepository {
@@ -25,10 +25,14 @@ class CartRepository {
             },
         });
 
-}
-getCartByUserOrdered = (id: string): Promise<Response> => {
-    return interceptedFetch(`/cart/user/ordered/${id}`, {});
-}
+    }
+    getCartByUserOrdered = (id: string): Promise<Response> => {
+        return interceptedFetch(`/cart/user/ordered/${id}`, {});
+    }
+
+    getAllOrderedCarts = (): Promise<Response> => {
+        return interceptedFetch(`/cart/admin-orders`, {});
+    }
 }
 
 export default new CartRepository();

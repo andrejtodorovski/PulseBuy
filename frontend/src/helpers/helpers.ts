@@ -47,7 +47,20 @@ export const isUserLoggedIn = () => {
     return getAuthToken() !== null;
 };
 
+export function isUserCustomer() {
+    if (!isUserLoggedIn()) return false;
+    if (typeof localStorage !== 'undefined' && localStorage !== null) {
+        if (localStorage.getItem("isAdmin") === null) {
+            return true;
+        }
+        return localStorage.getItem("isAdmin") === "false";
+    } else {
+        return false;
+    }
+}
+
 export const isUserAdmin = () => {
+    if (!isUserLoggedIn()) return false;
     if (typeof localStorage !== 'undefined' && localStorage !== null) {
         if (localStorage.getItem("isAdmin") === null) {
             return false;

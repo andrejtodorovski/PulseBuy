@@ -83,8 +83,6 @@
     }
 
     onMount(() => {
-        isUserLoggedIn() || goto('/login');
-
         const roomId = "Product";
 
         io.emit("joinRoom", roomId);

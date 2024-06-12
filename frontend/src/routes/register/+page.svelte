@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { interceptedFetch } from "../../helpers/helpers";
+  import { interceptedFetch, isUserLoggedIn } from "../../helpers/helpers";
     import { CreateCartDto } from "../../models/cart";
     import CartRepository from "../../repository/cartRepository";
+  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
 
   let error;
   let email: string;
@@ -58,6 +60,11 @@
     }
 
   };
+  onMount(async () => {
+    if (isUserLoggedIn()) {
+      await goto("/")
+    }
+  });
 </script>
 
 <svelte:head>

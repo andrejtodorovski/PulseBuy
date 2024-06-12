@@ -105,8 +105,8 @@
     <div class="links">
       <a href="/">Home</a>
       <a href="/about-us">About Us</a>
+      <a href="/products">Products</a>
       {#if isUserLoggedIn()}
-        <a href="/products">Products</a>
         {#if isUserAdmin()}
           <a href="/admin/orders">Orders</a>
           <a href="/admin">

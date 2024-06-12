@@ -5,9 +5,9 @@
     import CartItemRepository from '../../repository/cartItemRepository';
     import { type Cart, CreateCartDto } from '../../models/cart';
     import type { CartItem } from '../../models/cart-item';
-    import { getUserId, isUserLoggedIn } from '../../helpers/helpers';
-    import { goto } from '$app/navigation';
+    import { getUserId, isUserCustomer } from '../../helpers/helpers';
     import { toasts } from "svelte-toasts";
+    import { goto } from "$app/navigation";
 
     const cartItems = writable<CartItem[]>([]);
     let cart: Cart | null;
@@ -65,7 +65,7 @@
                 toasts.error('Not enough in stock. Please select a lower quantity');
                 return;
             }
-            const response = await CartItemRepository.updateCartItem(itemId.toString(), { quantity });
+            const response = await CartItemRepository.updateCartItem(itemId.toString(), {quantity});
             if (response.ok) {
                 toasts.success('Quantity updated successfully.');
                 await loadUserCart();
@@ -104,13 +104,14 @@
     }
 
 
-    onMount(() => {
-        isUserLoggedIn() || goto('/login');
-
-        loadUserCart();
+    onMount(async () => {
+        if (!isUserCustomer()) {
+            await goto("/unauthorized")
+        } else {
+            await loadUserCart();
+        }
     });
 </script>
-
 
 <div class="container">
     {#if $cartItems.length > 0}
@@ -132,7 +133,9 @@
                     <td><img src={item.product.imageURL} alt={item.product.name}> {item.product.name}</td>
                     <td>{item.product.description}</td>
                     <td>
-                        <input class="form-control" type="number" min="1" max="{item.product.numberInStock}" value={item.quantity} on:input={(event) => updateQuantity(item.id, event.target.value, item.product.numberInStock)} />
+                        <input class="form-control" type="number" min="1" max="{item.product.numberInStock}"
+                               value={item.quantity}
+                               on:input={(event) => updateQuantity(item.id, event.target.value, item.product.numberInStock)}/>
                     </td>
                     <td>${item.product.price}</td>
                     <td>${(item.quantity * item.product.price)}</td>
@@ -156,9 +159,9 @@
         <button class="btn btn-primary" on:click={orderProducts}>Order Products</button>
 
     {:else}
-    <div class="alert alert-info mt-4" role="alert">
-        Your cart is empty.
-      </div>
+        <div class="alert alert-info mt-4" role="alert">
+            Your cart is empty.
+        </div>
     {/if}
 </div>
 <style>

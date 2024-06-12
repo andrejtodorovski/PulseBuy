@@ -1,13 +1,13 @@
 <script lang="ts">
-    import {onMount} from 'svelte';
-    import {writable} from 'svelte/store';
+    import { onMount } from 'svelte';
+    import { writable } from 'svelte/store';
     import CartRepository from '../../repository/cartRepository';
     import CartItemRepository from '../../repository/cartItemRepository';
-    import type {Cart} from '../../models/cart';
-    import { goto } from '$app/navigation';
-    import { getUserId, isUserLoggedIn } from '../../helpers/helpers';
+    import type { CartWithCartItems } from '../../models/cart';
+    import { getUserId, isUserCustomer } from '../../helpers/helpers';
+    import { goto } from "$app/navigation";
 
-    const orderedCarts = writable<Cart[]>([]);
+    const orderedCarts = writable<CartWithCartItems[]>([]);
 
     async function loadOrderedCarts() {
         const userId = getUserId()!;
@@ -26,12 +26,14 @@
         orderedCarts.set(cartsWithItems);
     }
 
-    onMount(() => {
-        isUserLoggedIn() || goto('/login');
-        loadOrderedCarts();
+    onMount(async () => {
+        if (!isUserCustomer()) {
+            await goto("/unauthorized")
+        } else {
+            await loadOrderedCarts();
+        }
     });
 </script>
-
 <div class="container">
     {#if $orderedCarts.length > 0}
         {#each $orderedCarts as cart, index (cart.id)}
@@ -53,7 +55,7 @@
                         <td>{item.product.description}</td>
                         <td>{item.quantity}</td>
                         <td>${item.product.price}</td>
-                        <td>${(item.quantity * parseFloat(item.product.price)).toFixed(2)}</td>
+                        <td>${(item.quantity * parseFloat(item.product.price.toString())).toFixed(2)}</td>
                     </tr>
                 {/each}
                 </tbody>

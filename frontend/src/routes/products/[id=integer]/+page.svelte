@@ -4,7 +4,7 @@
     import { page } from "$app/stores";
     import ProductsRepository from "../../../repository/productsRepository";
     import { goto } from '$app/navigation';
-    import { getUserId, isUserAdmin, isUserLoggedIn } from '../../../helpers/helpers';
+    import { getUserId, isUserAdmin, isUserCustomer, isUserLoggedIn } from '../../../helpers/helpers';
     import { CreateCartItemDto } from "../../../models/cart-item";
     import CartItemRepository from "../../../repository/cartItemRepository";
     import CartRepository from "../../../repository/cartRepository";
@@ -22,6 +22,7 @@
     let createReviewDto = new CreateReviewDto();
     const productId = $page.params.id;
     let loggedInAndAdmin = isUserLoggedIn() && isUserAdmin();
+    let loggedInAndCustomer = isUserLoggedIn() && isUserCustomer();
 
     const fetchProduct = async () => {
         const productId = $page.params.id;
@@ -34,7 +35,6 @@
     }
 
     onMount(async () => {
-        isUserLoggedIn() || goto('/login');
 
         const roomId = `Product/${$page.params.id}`
 
@@ -151,33 +151,45 @@
             {/if}
         </div>
         {#if product.numberInStock !== 0}
-            <div class="add-to-cart">
-                <h3 class="text-xl font-medium">{product.name}</h3>
-                <p>Price: ${product.price}</p>
-                <label for="quantity">Quantity:</label>
-                <input type="number" min="1" max="{product.numberInStock}" class="form-control" id="quantity"
-                       bind:value={createCartItemDto.quantity}/>
+            {#if loggedInAndCustomer}
+                <div class="add-to-cart">
+                    <h3 class="text-xl font-medium">{product.name}</h3>
+                    <p>Price: ${product.price}</p>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" min="1" max="{product.numberInStock}" class="form-control" id="quantity"
+                           bind:value={createCartItemDto.quantity}/>
 
-                <button class="btn btn-primary mt-2" on:click|preventDefault={addToCart}>Add to Cart</button>
-            </div>
+                    <button class="btn btn-primary mt-2" on:click|preventDefault={addToCart}>Add to Cart</button>
+                </div>
+            {:else}
+                <h5>
+                    Please login to add this product to your cart
+                </h5>
+            {/if}
         {:else}
             <p class="out-of-stock">Out of stock</p>
         {/if}
     </div>
     <div class="product-reviews">
         <h2>Reviews</h2>
-        <div class="add-review">
-            <h5>What do you think of this product? Share your experience to help others.</h5>
-            <div class="d-flex justify-content-around">
-                <input type="text" placeholder="What do you think of this product?" bind:value={createReviewDto.comment}
-                       class="form-control w-50 mb-2"/>
-                <input type="number" min="1" max="5" placeholder="Rating" bind:value={createReviewDto.rating}
-                       class="form-control w-25 mb-2"/>
+        {#if loggedInAndCustomer}
+            <div class="add-review">
+                <h5>What do you think of this product? Share your experience to help others.</h5>
+                <div class="d-flex justify-content-around">
+                    <input type="text" placeholder="What do you think of this product?"
+                           bind:value={createReviewDto.comment}
+                           class="form-control w-50 mb-2"/>
+                    <input type="number" min="1" max="5" placeholder="Rating" bind:value={createReviewDto.rating}
+                           class="form-control w-25 mb-2"/>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success" on:click|preventDefault={addReview}>Add review
+                    </button>
+                </div>
             </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-success" on:click|preventDefault={addReview}>Add review</button>
-            </div>
-        </div>
+        {:else}
+            <h5>Please login to add a review for this product</h5>
+        {/if}
         <div class="reviews">
             {#if reviews?.length > 0}
                 {#each reviews as r}
