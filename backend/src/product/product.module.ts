@@ -8,16 +8,13 @@ import { Product } from "../models/product.entity";
 import { SaleService } from "../sale/sale.service";
 import { Sale } from "../models/sale.entity";
 import { SaleEventsService } from "../sale/sale-events.service";
+import { SaleModule } from "../sale/sale.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Product, Category, Sale])],
-    providers: [ProductService, ProductEventsService, SaleService, SaleEventsService],
+    imports: [SaleModule, TypeOrmModule.forFeature([Product, Category, Sale])],
+    providers: [ProductService, ProductEventsService],
     controllers: [ProductController],
     exports: [ProductService],
-})
-@Module({
-    controllers: [ProductController],
-    providers: [ProductService],
 })
 export class ProductModule {
 }

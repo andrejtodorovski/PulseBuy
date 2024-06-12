@@ -131,8 +131,18 @@ insert into html_templates ("eventClassName", subject, body, context)
 VALUES ('ProductCreatedEvent', 'New product added', 'New product: {{event.name}}', 'In App Notification'),
        ('ProductCreatedEvent', 'New product added', 'New product: {{event.name}}', 'Email Notification'),
        ('ProductUpdatedEvent', 'Updated product', 'Product: {{event.name}} has been updated', 'In App Notification'),
-       ('ProductUpdatedEvent', 'Updated product', 'Product: {{event.name}} has been updated', 'Email Notification')
+       ('ProductUpdatedEvent', 'Updated product', 'Product: {{event.name}} has been updated', 'Email Notification');
 
+
+insert into html_templates ("eventClassName", subject, body, context)
+VALUES ('ProductBackInStockEvent', 'Product back in stock', 'Product {{event.name}} is back in stock',
+        'In App Notification'),
+       ('ProductBackInStockEvent', 'Product back in stock', 'Product {{event.name}} is back in stock',
+        'Email Notification'),
+       ('OrderCreatedEvent', 'Order created',
+        'Your order was successfully processed. Your total is {{event.totalPrice}}', 'In App Notification'),
+       ('OrderCreatedEvent', 'Order created',
+        'Your order was successfully processed. Your total is {{event.totalPrice}}', 'Email Notification');
 
 
 drop view if exists v_system_analytics;

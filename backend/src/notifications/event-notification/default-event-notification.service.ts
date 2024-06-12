@@ -17,7 +17,7 @@ export class DefaultEventNotificationService extends EventNotificationService {
 
   override async applicableTo(event: PulseBuyEvent, channel: HtmlTemplateContext): Promise<boolean> {
     const eventType = event.getEventType();
-    if (eventType === 'Sale.SaleCreatedEvent' || eventType === 'Product.ProductBackInStockEvent') {
+    if (eventType === 'Sale.SaleCreatedEvent' || eventType === 'Product.ProductBackInStockEvent' || eventType === 'Order.OrderCreatedEvent') {
       return false;
     } else {
       return this.htmlTemplateService.existsByEventClassNameAndContext(event.constructor.name, channel);

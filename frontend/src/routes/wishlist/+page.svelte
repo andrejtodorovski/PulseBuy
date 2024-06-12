@@ -14,10 +14,8 @@
 
     onMount(async () => {
         if (!isUserCustomer()) {
-            console.log('here')
             await goto("/unauthorized")
         } else {
-            console.log('here1')
             let userId: string = getUserId() || "";
             const cartResponse = await CartRepository.getCartByUser(userId);
             cart = await cartResponse.json();

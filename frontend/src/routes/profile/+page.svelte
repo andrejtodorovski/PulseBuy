@@ -18,19 +18,16 @@
                     profile = profileData;
                 });
             });
-            ;
-
-            console.log(profile);
 
         } catch (e) {
             error = e.message;
         }
     };
     onMount(async () => {
-        if (isUserLoggedIn()) {
+        if (!isUserLoggedIn()) {
             await goto("/")
         } else {
-            loadProfile();
+            await loadProfile();
         }
     });
 

@@ -13,16 +13,18 @@ import { NotificationManagerEventsService } from "./notification-manager/notific
 import { NotificationManagerController } from "./notification-manager/notification-manager.controller";
 import { WishlistEventNotificationService } from "./event-notification/wishlist-event-notification-service";
 import { WishlistModule } from "../wishlist/wishlist.module";
+import { OrderCreatedEventNotificationService } from "./event-notification/order-created-event-notification.service";
 
 @Module({
     imports: [HtmlTemplateModule, UsersModule, WishlistModule, TypeOrmModule.forFeature([NotificationManager, InAppNotification])],
-    providers: [EmailNotificationListener, WishlistEventNotificationService, DefaultEventNotificationService, {
+    providers: [EmailNotificationListener, OrderCreatedEventNotificationService, WishlistEventNotificationService, DefaultEventNotificationService, {
         provide: 'eventNotificationServices',
         useFactory: (
-            defaultEventNotificationService: DefaultEventNotificationService,
+            orderCreatedEventNotificationService: OrderCreatedEventNotificationService,
             wishlistEventNotificationService: WishlistEventNotificationService,
-        ) => [defaultEventNotificationService, wishlistEventNotificationService],
-        inject: [DefaultEventNotificationService, WishlistEventNotificationService],
+            defaultEventNotificationService: DefaultEventNotificationService,
+        ) => [orderCreatedEventNotificationService, wishlistEventNotificationService, defaultEventNotificationService],
+        inject: [OrderCreatedEventNotificationService, WishlistEventNotificationService, DefaultEventNotificationService],
     }, NotificationManagerService, UserRegisteredListener, InAppNotificationsListener, NotificationManagerEventsService],
     controllers: [NotificationManagerController]
 })

@@ -20,7 +20,6 @@
 
         const cartsWithItems = await Promise.all(cartsWithItemsPromises);
         allOrderedCarts.set(cartsWithItems); // Use the writable store correctly
-        console.log(cartsWithItems);
     }
 
     onMount(async () => {
