@@ -42,4 +42,9 @@ export class MessageController {
     remove(@Param('id') id: string) {
         return this.messageService.remove(+id);
     }
+
+    @Get('messages-by-chat/:chatId')
+    findAllByChatId(@Param('chatId') chatId: string) {
+        return this.messageService.findAllByChatId(+chatId);
+    }
 }

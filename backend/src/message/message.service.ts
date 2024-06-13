@@ -5,6 +5,7 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { Message } from 'src/models/message.entity';
 import { ChatService } from "../chat/chat.service";
+import { MessageResponse } from "./dto/message-response";
 
 @Injectable()
 export class MessageService {
@@ -24,7 +25,8 @@ export class MessageService {
         }
         const message = this.messageRepository.create({
             content: createMessageDto.content,
-            chat
+            chat: chat,
+            isAdminReply: createMessageDto.isAdminReply
         });
         return this.messageRepository.save(message);
     }
@@ -44,6 +46,25 @@ export class MessageService {
     async findAllMessagesInChatByCookie(cookie: string): Promise<Message[]> {
         const chat = await this.chatService.getOrCreateChatByCookie(cookie);
         return this.messageRepository.find({where: {chat}, relations: ['chat']});
+    }
+
+    async findAllByChatId(chatId: number): Promise<MessageResponse[]> {
+        const messages = await this.messageRepository.find({
+            relations: ['chat'],
+            where: {
+                chat: {
+                    id: chatId
+                }
+            }
+        });
+        return messages.map(message => {
+            return new MessageResponse(
+                message.chat.id,
+                message.content,
+                message.isAdminReply
+            )
+        })
+
     }
 
     async findAllMessagesInChatByUserId(userId: string): Promise<Message[]> {

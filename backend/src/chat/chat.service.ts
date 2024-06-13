@@ -3,12 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { Chat } from 'src/models/chat.entity';
+import { Message } from "../models/message.entity";
+import { ChatResponse } from "./dto/chat-response";
+import { User } from "../models/user.entity";
 
 @Injectable()
 export class ChatService {
     constructor(
         @InjectRepository(Chat)
         private chatRepository: Repository<Chat>,
+        @InjectRepository(Message)
+        private messageRepository: Repository<Message>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>
     ) {
     }
 
@@ -26,9 +33,32 @@ export class ChatService {
         return this.chatRepository.save(chat);
     }
 
-    async findAll(): Promise<Chat[]> {
-        return this.chatRepository.find();
+    async findAll(): Promise<ChatResponse[]> {
+        const chats = await this.chatRepository.find();
+        return this.mapChatsToDto(chats);
     }
+
+    private async mapChatsToDto(chats: Chat[]): Promise<ChatResponse[]> {
+        return await Promise.all(chats.map(async chat => {
+            let user;
+            if (chat.userId != null) {
+                user = await this.userRepository.findOne({
+                    where: {
+                        id: +chat.userId
+                    }
+                })
+            } else {
+                user = null
+            }
+            return new ChatResponse(
+                chat.id,
+                chat.cookie,
+                chat.userId,
+                user ? user.fullName : 'Anonymous user',
+            );
+        }));
+    }
+
 
     async findOneByCookie(cookie: string): Promise<Chat> {
         const chat = await this.chatRepository.findOne({

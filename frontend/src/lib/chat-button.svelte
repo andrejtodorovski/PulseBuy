@@ -36,10 +36,8 @@
 
     async function sendMessage() {
         const userId = getUserId()
-        console.log(userId)
         let sendMessageDto;
         if (userId == null) {
-            console.log('userId is null', userId)
             const cookie = await getSessionCookieValue()
             sendMessageDto = new SendMessageDto(
                 content,
@@ -47,7 +45,6 @@
                 null
             )
         } else {
-            console.log('userId is not null', userId)
             sendMessageDto = new SendMessageDto(
                 content,
                 null,
@@ -168,13 +165,15 @@
         </div>
         <div class="card-body chat-body">
             {#each messages as msg}
-                <!--TODO distinct customer and support messages-->
-                <div class="message customer">
-                    {msg.content}
-                </div>
+                {#if msg.isAdminReply}
                 <div class="message support">
                     {msg.content}
                 </div>
+                {:else}
+                    <div class="message customer">
+                        {msg.content}
+                    </div>
+                {/if}
             {/each}
         </div>
         <div class="card-footer d-flex">

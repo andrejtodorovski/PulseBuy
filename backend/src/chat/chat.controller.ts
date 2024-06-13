@@ -12,11 +12,6 @@ export class ChatController {
         return this.chatService.create(createChatDto);
     }
 
-    @Get()
-    findAll() {
-        return this.chatService.findAll();
-    }
-
     @Get('/by-cookie/:cookie')
     findOneByCookie(@Param('cookie') cookie: string) {
         return this.chatService.findOneByCookie(cookie);
@@ -27,5 +22,9 @@ export class ChatController {
         return this.chatService.findOneByUserId(userId);
     }
 
+    @Get("admin-chats")
+    getAllChats() {
+        return this.chatService.findAll();
+    }
 
 }
