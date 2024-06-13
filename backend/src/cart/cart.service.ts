@@ -10,6 +10,8 @@ import { CartItem } from "../models/cart-item.entity";
 import { Product } from "../models/product.entity";
 import { OrderEventsService } from "./order/order-events.service";
 import { OrderCreatedEvent } from "./order/order.event";
+import { OrderInfo } from "../models/order-info.entity";
+import { OrderInfoRequest } from "./order/order-info.request";
 
 @Injectable()
 export class CartService {
@@ -23,6 +25,8 @@ export class CartService {
         private cartItemRepository: Repository<CartItem>,
         @InjectRepository(Product)
         private productRepository: Repository<Product>,
+        @InjectRepository(OrderInfo)
+        private orderInfoRepository: Repository<OrderInfo>,
         private orderEventsService: OrderEventsService
     ) {
     }
@@ -95,7 +99,7 @@ export class CartService {
         return this.cartRepository.delete(id);
     }
 
-    async changeStatus(id: number) {
+    async changeStatus(id: number, orderInfo: OrderInfoRequest) {
         const cart = await this.cartRepository.findOne({
             relations: ['user'],
             where: {id}
@@ -111,6 +115,14 @@ export class CartService {
         }
         const orderCreatedEvent = new OrderCreatedEvent(cart.user.id, totalPrice);
         this.orderEventsService.emitEvent(orderCreatedEvent);
+        const orderInfoEntity = this.orderInfoRepository.create({
+            ...orderInfo,
+            cart
+        });
+
+        await this.orderInfoRepository.save(
+            orderInfoEntity
+        );
         return await this.cartRepository.update(id, {
             status: CartStatus.DELIVERED,
             dateOrdered: new Date()

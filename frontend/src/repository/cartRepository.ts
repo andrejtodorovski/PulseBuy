@@ -1,10 +1,7 @@
 import { interceptedFetch } from "../helpers/helpers";
-import type { CreateCartDto } from "../models/cart";
+import { type CreateCartDto, CreateOrderInfo } from "../models/cart";
 
 class CartRepository {
-    fetchCarttById = (id: string): Promise<Response> => {
-        return interceptedFetch(`/cart/${id}`, {});
-    }
     createCart = (createCartDto: CreateCartDto): Promise<Response> => {
         return interceptedFetch("/cart", {
             method: "POST",
@@ -17,9 +14,10 @@ class CartRepository {
     getCartByUser = (id: string): Promise<Response> => {
         return interceptedFetch(`/cart/user/${id}`, {});
     }
-    orderCart = (id: string): Promise<Response> => {
+    orderCart = (id: string, orderInfo: CreateOrderInfo): Promise<Response> => {
         return interceptedFetch(`/cart/change-status/${id}`, {
             method: "PATCH",
+            body: JSON.stringify(orderInfo),
             headers: {
                 "Content-Type": "application/json",
             },

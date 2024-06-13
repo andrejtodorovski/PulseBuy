@@ -8,10 +8,13 @@
     import { getUserId, isUserCustomer } from '../../helpers/helpers';
     import { toasts } from "svelte-toasts";
     import { goto } from "$app/navigation";
+    import { CreateOrderInfo } from "../../models/cart";
 
     const cartItems = writable<CartItem[]>([]);
     let cart: Cart | null;
     let total = 0;
+    let orderInfo = new CreateOrderInfo();
+
 
     async function loadUserCart() {
         const userId = getUserId();
@@ -78,7 +81,11 @@
         }
     }
 
-    async function orderProducts() {
+    const orderProducts = async () => {
+        if (orderInfo.streetAddress == '' || orderInfo.city == '' || orderInfo.postalCode == '' || orderInfo.country == '' || orderInfo.phoneNumber == '') {
+            toasts.error('Please fill in all fields.');
+            return;
+        }
         const currentCart = cart;
         let createCartDto: CreateCartDto = new CreateCartDto();
         createCartDto.userId = Number(getUserId());
@@ -88,7 +95,7 @@
         }
 
         try {
-            const response = await CartRepository.orderCart(currentCart.id.toString());
+            const response = await CartRepository.orderCart(currentCart.id.toString(), orderInfo);
             if (response.ok) {
                 toasts.success('Order placed successfully!');
                 cartItems.set([]);
@@ -156,7 +163,39 @@
             </tr>
             </tbody>
         </table>
-        <button class="btn btn-primary" on:click={orderProducts}>Order Products</button>
+        <form class="d-flex flex-column align-items-center justify-content-center mt-4">
+            <input
+                    type="text"
+                    placeholder="Enter your address"
+                    class="form-control me-2 mb-2 w-50"
+                    bind:value={orderInfo.streetAddress}
+            />
+            <input
+                    type="text"
+                    placeholder="Enter your city"
+                    class="form-control me-2 mb-2 w-50"
+                    bind:value={orderInfo.city}
+            />
+            <input
+                    type="text"
+                    placeholder="Enter your postal code"
+                    class="form-control me-2 mb-2 w-50"
+                    bind:value={orderInfo.postalCode}
+            />
+            <input
+                    type="text"
+                    placeholder="Enter your country"
+                    class="form-control me-2 mb-2 w-50"
+                    bind:value={orderInfo.country}
+            />
+            <input
+                    type="tel"
+                    placeholder="Enter your phone number"
+                    class="form-control me-2 mb-2 w-50"
+                    bind:value={orderInfo.phoneNumber}
+            />
+            <button class="btn btn-primary" on:click={orderProducts}>Order Products</button>
+        </form>
 
     {:else}
         <div class="alert alert-info mt-4" role="alert">

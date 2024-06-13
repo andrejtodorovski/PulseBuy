@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartDto } from './dto/create-cart.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { OrderInfoRequest } from "./order/order-info.request";
+import { CreateCartDto } from "./dto/create-cart.dto";
 
 @Controller('cart')
 export class CartController {
@@ -9,8 +10,8 @@ export class CartController {
     }
 
     @Post()
-    create(@Body() CreateCartDto: CreateCartDto) {
-        return this.cartService.create(CreateCartDto);
+    create(@Body() createCartDto: CreateCartDto) {
+        return this.cartService.create(createCartDto);
     }
 
     @Get()
@@ -45,8 +46,8 @@ export class CartController {
 
     @Patch('change-status/:id')
     @UseGuards(JwtAuthGuard)
-    changeStatus(@Param('id') id: string) {
-        return this.cartService.changeStatus(+id);
+    changeStatus(@Param('id') id: string, @Body() orderInfo: OrderInfoRequest) {
+        return this.cartService.changeStatus(+id, orderInfo);
     }
 
     @Get('user/ordered/:id')
