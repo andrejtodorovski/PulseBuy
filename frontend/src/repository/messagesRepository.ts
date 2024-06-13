@@ -12,8 +12,12 @@ class MessagesRepository {
         });
     };
 
-    getMessages = (cookie: string): Promise<Response> => {
-        return interceptedFetch(`/message/chat/${cookie}`, {});
+    getMessagesByCookie = (cookie: string): Promise<Response> => {
+        return interceptedFetch(`/message/chat/by-cookie/${cookie}`, {});
+    }
+
+    getMessagesByUserId = (userId: string): Promise<Response> => {
+        return interceptedFetch(`/message/chat/by-user-id/${userId}`, {});
     }
 }
 

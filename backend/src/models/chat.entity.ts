@@ -1,12 +1,21 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity(
-    { name: 'chats' }
+    {name: 'chats'}
 )
 export class Chat {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({
+            nullable: true
+        }
+    )
     cookie: string;
+
+    @Column({
+            nullable: true
+        }
+    )
+    userId: string;
 }

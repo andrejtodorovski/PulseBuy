@@ -1,9 +1,10 @@
 export class CreateChatDto {
     content: string;
-    cookie: string;
-    // userId: number; TODO() - should we have userId if the user is logged in instead of the cookie?
-    constructor(content: string, cookie: string) {
+    cookie: string | null;
+    userId: string | null;
+    constructor(content: string, cookie: string | null, userId: string | null) {
         this.content = content;
         this.cookie = cookie
+        this.userId = userId
     }
 }

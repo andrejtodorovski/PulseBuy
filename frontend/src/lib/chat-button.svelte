@@ -3,7 +3,7 @@
     import MessagesRepository from "../repository/messagesRepository";
     import { toasts } from "svelte-toasts";
     import { SendMessageDto } from "../models/message";
-    import { getSessionCookieValue } from "../helpers/helpers";
+    import { getSessionCookieValue, getUserId } from "../helpers/helpers";
 
     let showChat = false;
     let content = '';
@@ -17,8 +17,14 @@
     }
 
     async function loadMessages() {
-        const cookie = await getSessionCookieValue()
-        const res = await MessagesRepository.getMessages(cookie)
+        const userId = getUserId()
+        let res;
+        if (userId != null) {
+            res = await MessagesRepository.getMessagesByUserId(userId)
+        } else {
+            const cookie = await getSessionCookieValue()
+            res = await MessagesRepository.getMessagesByCookie(cookie)
+        }
         const response = await res.json()
 
         if (res.ok) {
@@ -29,11 +35,25 @@
     }
 
     async function sendMessage() {
-        const cookie = await getSessionCookieValue()
-        const sendMessageDto = new SendMessageDto(
-            content,
-            cookie
-        )
+        const userId = getUserId()
+        console.log(userId)
+        let sendMessageDto;
+        if (userId == null) {
+            console.log('userId is null', userId)
+            const cookie = await getSessionCookieValue()
+            sendMessageDto = new SendMessageDto(
+                content,
+                cookie,
+                null
+            )
+        } else {
+            console.log('userId is not null', userId)
+            sendMessageDto = new SendMessageDto(
+                content,
+                null,
+                userId
+            )
+        }
         await MessagesRepository.sendMessage(sendMessageDto)
         await loadMessages()
     }
