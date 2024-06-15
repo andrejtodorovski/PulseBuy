@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { HtmlTemplateModule } from "../html-template/html-template.module";
 import { UsersModule } from "../users/users.module";
 import { EmailNotificationListener } from "./listeners/email-notification.listener";
-import { DefaultEventNotificationService } from "./event-notification/default-event-notification.service";
+import { AllUsersEventNotificationService } from "./event-notification/all-users-event-notification.service";
 import { NotificationManagerService } from "./notification-manager/notification-manager.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { NotificationManager } from "../models/notification-manager.entity";
@@ -13,18 +13,20 @@ import { NotificationManagerEventsService } from "./notification-manager/notific
 import { NotificationManagerController } from "./notification-manager/notification-manager.controller";
 import { WishlistEventNotificationService } from "./event-notification/wishlist-event-notification-service";
 import { WishlistModule } from "../wishlist/wishlist.module";
-import { OrderCreatedEventNotificationService } from "./event-notification/order-created-event-notification.service";
+import { OneUserEventNotificationService } from "./event-notification/one-user-event-notification.service";
+import { AllAdminsEventNotificationService } from "./event-notification/all-admins-event-notification.service";
 
 @Module({
     imports: [HtmlTemplateModule, UsersModule, WishlistModule, TypeOrmModule.forFeature([NotificationManager, InAppNotification])],
-    providers: [EmailNotificationListener, OrderCreatedEventNotificationService, WishlistEventNotificationService, DefaultEventNotificationService, {
+    providers: [EmailNotificationListener, OneUserEventNotificationService, WishlistEventNotificationService, AllAdminsEventNotificationService, AllUsersEventNotificationService, {
         provide: 'eventNotificationServices',
         useFactory: (
-            orderCreatedEventNotificationService: OrderCreatedEventNotificationService,
+            oneUserEventNotificationService: OneUserEventNotificationService,
             wishlistEventNotificationService: WishlistEventNotificationService,
-            defaultEventNotificationService: DefaultEventNotificationService,
-        ) => [orderCreatedEventNotificationService, wishlistEventNotificationService, defaultEventNotificationService],
-        inject: [OrderCreatedEventNotificationService, WishlistEventNotificationService, DefaultEventNotificationService],
+            allAdminsEventNotificationService: AllAdminsEventNotificationService,
+            allUsersEventNotificationService: AllUsersEventNotificationService,
+        ) => [oneUserEventNotificationService, wishlistEventNotificationService, allAdminsEventNotificationService, allUsersEventNotificationService],
+        inject: [OneUserEventNotificationService, WishlistEventNotificationService, AllAdminsEventNotificationService, AllUsersEventNotificationService],
     }, NotificationManagerService, UserRegisteredListener, InAppNotificationsListener, NotificationManagerEventsService],
     controllers: [NotificationManagerController]
 })

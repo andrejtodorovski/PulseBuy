@@ -13,9 +13,11 @@ export abstract class OrderEvent extends PulseBuyEvent {
 
 export class OrderCreatedEvent extends OrderEvent {
     totalPrice: number;
+    userId: number;
 
-    constructor(id: number, totalPrice: number) {
+    constructor(id: number, totalPrice: number, userId: number) {
         super(id);
         this.totalPrice = totalPrice;
+        this.userId = userId;
     }
 }

@@ -68,4 +68,15 @@ export class UsersService {
       }
     );
   }
+
+  findAllAdmins(): Promise<User[]> {
+    return this.usersRepository.find(
+      {
+        where: { isAdmin: true },
+        order: {
+          id: "ASC"
+        }
+      }
+    );
+  }
 }

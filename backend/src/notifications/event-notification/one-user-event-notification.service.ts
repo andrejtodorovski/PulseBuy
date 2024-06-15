@@ -7,7 +7,7 @@ import { User } from "../../models/user.entity";
 import { HtmlTemplateContext } from "../../models/html-template-context.enum";
 
 @Injectable()
-export class OrderCreatedEventNotificationService extends EventNotificationService {
+export class OneUserEventNotificationService extends EventNotificationService {
     constructor(
         readonly htmlTemplateService: HtmlTemplateService,
         readonly usersService: UsersService,
@@ -16,7 +16,8 @@ export class OrderCreatedEventNotificationService extends EventNotificationServi
     }
 
     override async notificationRecipients(event: PulseBuyEvent): Promise<User[]> {
-        return await this.usersService.findById(event.id).then(
+        const anyEvent = event as any;
+        return await this.usersService.findById(anyEvent.userId).then(
             user => [user]
         )
     }
@@ -24,7 +25,7 @@ export class OrderCreatedEventNotificationService extends EventNotificationServi
     override async applicableTo(event: PulseBuyEvent, channel: HtmlTemplateContext): Promise<boolean> {
         const eventType = event.getEventType();
 
-        if (eventType === 'Order.OrderCreatedEvent') {
+        if (eventType === 'Order.OrderCreatedEvent' || eventType === 'Message.MessageSentByAdminEvent') {
             return this.htmlTemplateService.existsByEventClassNameAndContext(event.constructor.name, channel);
         } else {
             return false;

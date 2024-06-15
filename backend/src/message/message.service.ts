@@ -6,13 +6,19 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 import { Message } from 'src/models/message.entity';
 import { ChatService } from "../chat/chat.service";
 import { MessageResponse } from "./dto/message-response";
+import { MessageSentByAdminEvent, MessageSentByUserEvent } from "./events/message.event";
+import { User } from "../models/user.entity";
+import { MessageEventsService } from "./message-events.service";
 
 @Injectable()
 export class MessageService {
     constructor(
         @InjectRepository(Message)
         private messageRepository: Repository<Message>,
-        private chatService: ChatService
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+        private chatService: ChatService,
+        private messageEventsService: MessageEventsService
     ) {
     }
 
@@ -28,6 +34,25 @@ export class MessageService {
             chat: chat,
             isAdminReply: createMessageDto.isAdminReply
         });
+        let user;
+        if (chat.userId != null) {
+            user = await this.userRepository.findOne({
+                where: {
+                    id: +chat.userId
+                }
+            });
+        } else {
+            user = null;
+        }
+        if (!createMessageDto.isAdminReply) {
+            const messageSentByUserEvent = new MessageSentByUserEvent(chat.id, user ? user.fullName : 'Anonymous user');
+            this.messageEventsService.emitEvent(messageSentByUserEvent);
+        } else {
+            if (chat.userId != null) {
+                const messageSentByAdminEvent = new MessageSentByAdminEvent(chat.id, chat.userId);
+                this.messageEventsService.emitEvent(messageSentByAdminEvent);
+            }
+        }
         return this.messageRepository.save(message);
     }
 

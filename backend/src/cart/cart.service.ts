@@ -113,7 +113,7 @@ export class CartService {
             totalPrice += cartItem.product.price * cartItem.quantity;
             await this.productRepository.update(cartItem.product.id, {numberInStock: cartItem.product.numberInStock - cartItem.quantity});
         }
-        const orderCreatedEvent = new OrderCreatedEvent(cart.user.id, totalPrice);
+        const orderCreatedEvent = new OrderCreatedEvent(cart.id, totalPrice, cart.user.id);
         this.orderEventsService.emitEvent(orderCreatedEvent);
         const orderInfoEntity = this.orderInfoRepository.create({
             ...orderInfo,

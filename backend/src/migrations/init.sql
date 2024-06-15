@@ -143,3 +143,11 @@ VALUES ('ProductBackInStockEvent', 'Product back in stock', 'Product {{event.nam
         'Your order was successfully processed. Your total is {{event.totalPrice}}', 'In App Notification'),
        ('OrderCreatedEvent', 'Order created',
         'Your order was successfully processed. Your total is {{event.totalPrice}}', 'Email Notification');
+
+
+
+insert into html_templates ("eventClassName", subject, body, context)
+VALUES ('MessageSentByUserEvent', 'New customer support message', 'New message by {{event.fullName}}',
+        'In App Notification'),
+       ('MessageSentByAdminEvent', 'You have a new customer support reply', 'An admin has replied to your message',
+        'In App Notification');
