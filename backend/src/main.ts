@@ -14,7 +14,7 @@ async function bootstrap() {
     methods: "GET, POST, PATCH, DELETE, PUT, OPTIONS"
   });
 
-  await app.listen(3000);
+  await app.listen(3000, "0.0.0.0");
 }
 
 bootstrap();
