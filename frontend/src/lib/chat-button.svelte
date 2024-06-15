@@ -4,6 +4,7 @@
     import { toasts } from "svelte-toasts";
     import { SendMessageDto } from "../models/message";
     import { getSessionCookieValue, getUserId, isUserAdmin } from "../helpers/helpers";
+    import { io } from "$lib/webSocketConnection";
 
     let showChat = false;
     let content = '';
@@ -35,6 +36,9 @@
     }
 
     async function sendMessage() {
+        if (content === '') {
+            return
+        }
         const userId = getUserId()
         let sendMessageDto;
         if (userId == null) {
@@ -56,6 +60,13 @@
     }
 
     onMount(() => {
+        const roomId = "Message";
+
+        io.emit("joinRoom", roomId);
+
+        io.on("Message.MessageSentByAdminEvent", (event) => {
+            loadMessages()
+        });
         document.addEventListener('click', handleClickOutside);
         return () => {
             document.removeEventListener('click', handleClickOutside);

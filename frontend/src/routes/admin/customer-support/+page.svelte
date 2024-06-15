@@ -5,6 +5,7 @@
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
     import MessagesRepository from "../../../repository/messagesRepository";
+    import { io } from "$lib/webSocketConnection";
 
     const chats = writable<Chat[]>([]);
     const messages = writable(<Message[]>([]));
@@ -35,9 +36,17 @@
         }
     }
 
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
 
     async function sendMessage() {
         let sendMessageDto;
+        if (newMessage === '') {
+            return
+        }
         if (selectedChat != null) {
             if (selectedChat.userId == null) {
                 sendMessageDto = new SendMessageDto(
@@ -63,6 +72,13 @@
     }
 
     onMount(async () => {
+        const roomId = "Message";
+
+        io.emit("joinRoom", roomId);
+
+        io.on("Message.MessageSentByUserEvent", (event) => {
+            loadMessages(event.id)
+        });
         if (!isUserAdmin()) {
             await goto("/unauthorized")
         } else {
@@ -104,7 +120,7 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex">
-                    <input type="text" class="form-control" placeholder="Type your message..." bind:value={newMessage}>
+                    <input type="text" class="form-control" placeholder="Type your message..." bind:value={newMessage} on:keydown={handleKeyDown}>
                     <button class="btn my-button" on:click={sendMessage}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-send"
