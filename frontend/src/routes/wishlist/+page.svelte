@@ -100,16 +100,23 @@
                                      style="max-width: 100px;">
                                 {item.product.name}</td>
                             <td>{item.product.price}</td>
-                            <td>TBD</td>
+                            <td>{item.product.numberInStock}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" type="button"
                                         on:click={() => removeFromWishlist(item.id)}>
                                     Remove
                                 </button>
-                                <button class="btn btn-primary btn-sm" type="button"
-                                        on:click={() => addToCart(item.product.id)}>Move to
-                                    Cart
-                                </button>
+                                {#if item.product.numberInStock > 0}
+                                    <button class="btn btn-primary btn-sm" type="button"
+                                            on:click={() => addToCart(item.product.id)}>Move to
+                                        Cart
+                                    </button>
+                                {:else}
+                                    <button class="btn btn-secondary btn-sm" type="button" disabled>
+                                        Out of Stock
+                                    </button>
+                                {/if}
+
                             </td>
                         </tr>
                     {/each}

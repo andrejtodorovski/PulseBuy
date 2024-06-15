@@ -61,12 +61,9 @@ export class CartService {
     }
 
     findByUser(userId: number) {
-        const user = this.userRepository.findOne({
-            where: {id: userId}
-        }) as unknown as User;
         return this.cartRepository.findOne({
             where: {
-                user,
+                user: {id: userId},
                 status: CartStatus.IN_CART
             }
         });
@@ -123,6 +120,7 @@ export class CartService {
         await this.orderInfoRepository.save(
             orderInfoEntity
         );
+        await this.create(new CreateCartDto(cart.user.id))
         return await this.cartRepository.update(id, {
             status: CartStatus.DELIVERED,
             dateOrdered: new Date()

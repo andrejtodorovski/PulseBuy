@@ -87,8 +87,6 @@
             return;
         }
         const currentCart = cart;
-        let createCartDto: CreateCartDto = new CreateCartDto();
-        createCartDto.userId = Number(getUserId());
         if (!currentCart) {
             toasts.error('No cart available to order.')
             return;
@@ -107,7 +105,7 @@
         } catch (error) {
             toasts.error('Failed to place order.');
         }
-        await CartRepository.createCart(createCartDto);
+        await loadUserCart();
     }
 
 
