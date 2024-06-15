@@ -10,7 +10,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
-      - "54321:5432"
+      - "5432:5432"
     container_name: pulsebuy_db
   pulsebuy_backend:
     depends_on:
@@ -28,6 +28,7 @@ services:
       - "DATABASE_USER=postgres"
       - "DATABASE_PASSWORD=admin"
       - "DATABASE_NAME=pulsebuy"
+      - "CLIENT_URL=http://localhost:5000"
   pulsebuy_frontend:
     # image: registry.gitlab.com/pulsebuy/v1-frontend:prod
     depends_on:

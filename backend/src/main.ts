@@ -1,17 +1,20 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { initializeTransactionalContext } from 'typeorm-transactional';
-require('dotenv').config();
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { initializeTransactionalContext } from "typeorm-transactional";
+import * as process from "process";
+import * as dotenv from "dotenv";
 
 async function bootstrap() {
+  dotenv.config();
   initializeTransactionalContext();
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     allowedHeaders: "Authorization, Origin, X-Requested-With, Content-Type, Accept",
-    methods: "GET, POST, PATCH, DELETE, PUT, OPTIONS",
+    methods: "GET, POST, PATCH, DELETE, PUT, OPTIONS"
   });
-  
+
   await app.listen(3000);
 }
+
 bootstrap();

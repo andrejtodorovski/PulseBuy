@@ -33,35 +33,39 @@ export class UsersService {
       password: hashedPassword
     });
 
-    this.userEventsService.emitEvent(new UserCreatedEvent(user.id, user));
+    const userPromise = this.usersRepository.save(user);
 
-    return this.usersRepository.save(user);
+    userPromise.then((u) => {
+      this.userEventsService.emitEvent(new UserCreatedEvent(u.id, u));
+    });
+
+    return userPromise;
   }
 
   async updatePermissions(id: number): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id }});
+    const user = await this.usersRepository.findOne({ where: { id } });
     user.isAdmin = !user.isAdmin;
     return this.usersRepository.save(user);
   }
 
   findAll(): Promise<User[]> {
     return this.usersRepository.find(
-        {
-          order: {
-            id: "ASC"
-          }
+      {
+        order: {
+          id: "ASC"
         }
+      }
     );
   }
 
   findAllUsers(): Promise<User[]> {
     return this.usersRepository.find(
-        {
-          where: { isAdmin: false },
-          order: {
-            id: "ASC"
-          }
+      {
+        where: { isAdmin: false },
+        order: {
+          id: "ASC"
         }
+      }
     );
   }
 }
