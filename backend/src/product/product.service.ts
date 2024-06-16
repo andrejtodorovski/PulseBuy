@@ -40,9 +40,13 @@ export class ProductService {
     });
 
     const productCreatedEvent = new ProductCreatedEvent(product.id, product.name);
-    this.productEventsService.emitEvent(productCreatedEvent);
 
-    return await this.productsRepository.save(product);
+    const productPromise = this.productsRepository.save(product);
+
+    productPromise.then(() => {
+      this.productEventsService.emitEvent(productCreatedEvent);
+    });
+    return productPromise;
   }
 
   async findAllByCategoryId(categoryId: number) {
@@ -72,14 +76,15 @@ export class ProductService {
     return this.mapProductToProductInfo(products);
 
   }
+
   async findFeatured(): Promise<ProductInfoResponse[]> {
     const products = await this.productsRepository.find({
       relations: ["category"],
       order: {
-          createdAt: "DESC"
+        createdAt: "DESC"
       }
     });
-    return this.mapProductToProductInfo(products.slice(0,4));
+    return this.mapProductToProductInfo(products.slice(0, 4));
   }
 
   async mapProductToProductInfo(products: Product[]) {
@@ -146,22 +151,27 @@ export class ProductService {
     });
 
     const productUpdatedEvent = new ProductUpdatedEvent(product.id);
-    this.productEventsService.emitEvent(productUpdatedEvent);
 
-    return await this.productsRepository.save(updatedProduct);
+    const productPromise = this.productsRepository.save(updatedProduct);
+
+    productPromise.then(() => {
+      this.productEventsService.emitEvent(productUpdatedEvent);
+    });
+    return productPromise;
   }
 
   async updateStock(id: number, addAmount: number) {
     const product = await this.productsRepository.findOne(
-        {where: {id}}
+      { where: { id } }
     );
-    const productBackInStockEvent = new ProductBackInStockEvent(id, product.name)
-    if (product.numberInStock === 0 && addAmount > 0) {
-      this.productEventsService.emitEvent(productBackInStockEvent);
-    }
-    return this.productsRepository.update(id, {
+    const productBackInStockEvent = new ProductBackInStockEvent(id, product.name);
+    const productPromise = this.productsRepository.update(id, {
       numberInStock: product.numberInStock + addAmount
     });
+    productPromise.then(() => {
+      this.productEventsService.emitEvent(productBackInStockEvent);
+    });
+    return productPromise;
   }
 
   remove(id: number) {

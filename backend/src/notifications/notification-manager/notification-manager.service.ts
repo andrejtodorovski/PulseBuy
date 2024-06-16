@@ -42,8 +42,11 @@ export class NotificationManagerService {
       const shiftedNotification = notificationManager.inAppNotifications.shift();
       await this.inAppNotificationRepository.remove(shiftedNotification);
     }
-    this.notificationManagerEventsService.emitEvent(new NotificationAddedToManagerEvent(user.id, body));
-    return this.inAppNotificationRepository.save(inAppNotification);
+    const notificationPromise = this.inAppNotificationRepository.save(inAppNotification);
+    notificationPromise.then(() => {
+      this.notificationManagerEventsService.emitEvent(new NotificationAddedToManagerEvent(user.id, body));
+    });
+    return notificationPromise;
   }
 
   async markNotificationAsRead(notificationId: number): Promise<void> {
@@ -52,8 +55,13 @@ export class NotificationManagerService {
       throw new NotFoundException("Notification not found");
     }
     notification.status = NotificationStatus.READ;
-    this.notificationManagerEventsService.emitEvent(new NotificationMarkedAsReadEvent(notification.notificationManager.user.id));
-    await this.inAppNotificationRepository.save(notification);
+    const notificationPromise = this.inAppNotificationRepository.save(notification);
+
+    notificationPromise.then(
+      () => {
+        this.notificationManagerEventsService.emitEvent(new NotificationMarkedAsReadEvent(notification.notificationManager.user.id));
+      });
+    await notificationPromise;
   }
 
   async getInAppNotificationsForUser(userId: number): Promise<InAppNotification[]> {
