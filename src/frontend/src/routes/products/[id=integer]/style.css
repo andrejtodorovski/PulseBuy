@@ -1,0 +1,97 @@
+.product-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.product-reviews {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    flex-direction: column;
+}
+.review p {
+    color: var(--dark-blue);
+}
+
+.product-image {
+    flex: 1;
+    max-width: 400px;
+    margin-right: 20px;
+}
+.rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.product-info {
+    flex: 1;
+    max-width: 600px;
+    text-align: left;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.category {
+    color: #6c757d;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.price {
+    font-weight: bold;
+    color: #28a745;
+    font-size: 1.2rem;
+}
+
+.quantity {
+    color: #6c757d;
+    font-size: 1.2rem;
+}
+
+.description {
+    margin-bottom: 20px;
+    color: #495057;
+    line-height: 1.4;
+}
+.star {
+    font-size: 24px;
+    color: gray;
+    cursor: pointer;
+}
+
+.star.filled {
+    color: gold;
+}
+
+.star.low {
+    color: gold;
+}
+
+.star.medium {
+    color: gold;
+}
+
+.star.high {
+    color: gold;
+}
+
+.average {
+    margin-left: 10px;
+    font-size: 20px;
+    color: #000;
+}

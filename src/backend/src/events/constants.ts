@@ -1,0 +1,1 @@
+export const PULSE_BUY_EVENT = 'pulse-buy';

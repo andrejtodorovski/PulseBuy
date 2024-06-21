@@ -1,0 +1,1 @@
+export const SALE_MODULE_NAME = "Sale";

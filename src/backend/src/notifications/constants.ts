@@ -1,0 +1,1 @@
+export const NOTIFICATION_MANAGER_MODULE_NAME = "NotificationManager";
