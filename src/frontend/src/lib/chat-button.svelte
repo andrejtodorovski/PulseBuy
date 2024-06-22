@@ -155,7 +155,7 @@
         padding: 15px;
         background-color: #f8f9fa;
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
 </style>
 {#if !isUserAdmin()}
@@ -180,7 +180,7 @@
       </button>
     </div>
     <div class="card-body chat-body">
-      {#each messages as msg}
+      {#each [...messages].reverse() as msg}
         {#if msg.isAdminReply}
           <div class="message support">
             {msg.content}

@@ -101,12 +101,12 @@
         </div>
         <div class="col-md-9 p-3 d-flex flex-column">
             {#if selectedChat}
-                <div class="card chat-interface">
+                <div class="card chat-interface" id="chat-body" style="max-height: 90vh">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <span>{selectedChat.userName}</span>
                     </div>
                     <div class="card-body chat-body">
-                        {#each $messages as msg}
+                        {#each [...$messages].reverse() as msg}
                             {#if msg.isAdminReply}
                                 <div class="message support">
                                     {msg.content}
@@ -175,7 +175,7 @@
         padding: 15px;
         background-color: #f8f9fa;
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
 
     .chat-list {
